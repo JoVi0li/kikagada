@@ -25,6 +25,7 @@ void main() {
     error = GenericRankError(error: 'error');
     usecase = GetRanksUsecase(repository: repository);
     registerFallbackValue(0);
+    registerFallbackValue(rank);
   });
 
   group('get ranks usecase tests', () {
@@ -33,7 +34,7 @@ void main() {
         (_) => Future(() => ([rank], null)),
       );
 
-      final (success, error) = await usecase(0, 0);
+      final (success, error) = await usecase(rank, 0);
 
       expect(error, isNull);
       expect(success, isNotNull);
@@ -46,7 +47,7 @@ void main() {
         (_) => Future(() => (null, error)),
       );
 
-      final (success, failure) = await usecase(0, 0);
+      final (success, failure) = await usecase(rank, 0);
 
       expect(success, isNull);
       expect(failure, isNotNull);

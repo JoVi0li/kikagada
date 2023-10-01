@@ -13,7 +13,7 @@ class RankRepository implements IRankRepository {
 
   @override
   Future<(List<ReviewRankEntity>?, RankError?)> getRanks(
-    int? starterAfter,
+    ReviewRankEntity? starterAfter,
     int? limit,
   ) async {
     try {

@@ -4,7 +4,7 @@ import 'package:kikagada/modules/rank/domain/errors/rank_errors.dart';
 
 abstract interface class IRankRepository {
   Future<(List<ReviewRankEntity>? success, RankError? error)> getRanks(
-    int? starterAfter,
+    ReviewRankEntity? starterAfter,
     int? limit,
   );
   Future<(void success, RankError? error)> voteRelevance(

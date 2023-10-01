@@ -30,6 +30,7 @@ void main() {
     error = GenericRankError(error: 'error');
     registerFallbackValue(0);
     registerFallbackValue(relevance);
+    registerFallbackValue(rank);
   });
 
   group('rank repository tests', () {
@@ -38,7 +39,7 @@ void main() {
         (_) => Future(() => [rank]),
       );
 
-      final (success, error) = await repository.getRanks(0, 0);
+      final (success, error) = await repository.getRanks(rank, 0);
 
       expect(error, isNull);
       expect(success, isNotNull);
@@ -49,7 +50,7 @@ void main() {
     test('should return an error after try get ranks', () async {
       when(() => datasource.getRanks(any(), any())).thenThrow(error);
 
-      final (success, failure) = await repository.getRanks(0, 0);
+      final (success, failure) = await repository.getRanks(rank, 0);
 
       expect(success, isNull);
       expect(failure, isNotNull);

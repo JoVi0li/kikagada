@@ -4,7 +4,7 @@ import 'package:kikagada/modules/rank/domain/repositories/rank_repository.dart';
 
 abstract interface class IGetRanksUsecase {
   Future<(List<ReviewRankEntity>? success, RankError? error)> call(
-    int? starterAfter,
+    ReviewRankEntity? starterAfter,
     int? limit,
   );
 }
@@ -17,7 +17,7 @@ class GetRanksUsecase implements IGetRanksUsecase {
 
   @override
   Future<(List<ReviewRankEntity>?, RankError?)> call(
-    int? starterAfter,
+    ReviewRankEntity? starterAfter,
     int? limit,
   ) async {
     return await _repository.getRanks(starterAfter, limit);
