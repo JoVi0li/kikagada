@@ -5,7 +5,7 @@ void main() {
   group('review rank entity tests', () {
     test('should throw an assertion error when id property is empty', () {
       void createReviewRankEntity() {
-        ReviewRankEntity(id: '', reviewId: '01', relevanceVotes: [], notes: []);
+        ReviewRankEntity(id: '', reviewId: '01', reviewTitle: 'title', relevanceVotes: [], notes: [],);
       }
 
       expect(createReviewRankEntity, throwsAssertionError);
@@ -13,7 +13,15 @@ void main() {
 
     test('should throw an assertion error when reviewId property is empty', () {
       void createReviewRankEntity() {
-        ReviewRankEntity(id: '01', reviewId: '', relevanceVotes: [], notes: []);
+        ReviewRankEntity(id: '01', reviewId: '', reviewTitle: 'title', relevanceVotes: [], notes: [],);
+      }
+
+      expect(createReviewRankEntity, throwsAssertionError);
+    });
+
+    test('should throw an assertion error when reviewTitle property is empty', () {
+      void createReviewRankEntity() {
+        ReviewRankEntity(id: '01', reviewId: '01', reviewTitle: '', relevanceVotes: [], notes: [],);
       }
 
       expect(createReviewRankEntity, throwsAssertionError);
@@ -21,7 +29,7 @@ void main() {
 
     test('should create an instance of ReviewRankEntity', () {
       expect(
-          ReviewRankEntity(id: '01', reviewId: '01', relevanceVotes: [], notes: []),
+          ReviewRankEntity(id: '01', reviewId: '01', reviewTitle: 'title', relevanceVotes: [], notes: []),
           isA<ReviewRankEntity>());
     });
   });
