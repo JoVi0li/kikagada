@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "405829735179",
+    "project_id": "kikagada-38625",
+    "storage_bucket": "kikagada-38625.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405829735179:android:0535f71b509cc789de480e",
+        "android_client_info": {
+          "package_name": "com.example.kikagada"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAykNxapFyeOXUAlJrn1v-jYAp5qSLRtQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
