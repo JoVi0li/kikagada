@@ -5,7 +5,7 @@ import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase.d
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
 import 'package:kikagada/shared/components/error_dialog_component.dart';
-import 'package:kikagada/shared/routes/home_routes.dart';
+import 'package:kikagada/shared/routes/rank_routes.dart';
 
 class LoginStore extends ValueNotifier<LoginState> {
   LoginStore(this._loginWithGoogleUsecase, this._loginWithAppleUsecase)
@@ -70,7 +70,7 @@ class LoginStore extends ValueNotifier<LoginState> {
   ) async {
     return await Navigator.pushNamedAndRemoveUntil<void>(
       context,
-      HomeRoutes.home,
+      RankRoutes.overview,
       (route) => false,
       arguments: user,
     );
