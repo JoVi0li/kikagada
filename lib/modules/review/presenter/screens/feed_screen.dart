@@ -7,6 +7,7 @@ import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_erro
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_initial_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_loading_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_success_widget.dart';
+import 'package:kikagada/shared/components/app_bar_component.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -38,6 +39,10 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.sizeOf(context).width, 60),
+        child: const AppBarComponent(title: 'Kikagada'),
+      ),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,
@@ -60,6 +65,10 @@ class _FeedScreenState extends State<FeedScreen> {
             }
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
       ),
     );
   }

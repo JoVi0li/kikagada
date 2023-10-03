@@ -64,6 +64,7 @@ class _SuccessReviewDetailsWidgetState
               ),
             ),
           ),
+          const SizedBox(height: 60),
         ],
       ),
     );

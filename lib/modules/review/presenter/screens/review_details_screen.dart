@@ -6,6 +6,7 @@ import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/initial_review_details_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/loading_review_details_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/success_review_details_widget.dart';
+import 'package:kikagada/shared/components/app_bar_component.dart';
 
 class ReviewDetailsScreen extends StatefulWidget {
   const ReviewDetailsScreen({super.key});
@@ -37,6 +38,10 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.sizeOf(context).width, 60),
+        child: const AppBarComponent(title: 'Review'),
+      ),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,

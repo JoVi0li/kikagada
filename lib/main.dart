@@ -4,6 +4,7 @@ import 'package:kikagada/firebase_options.dart';
 import 'package:kikagada/shared/inject/inject.dart';
 import 'package:kikagada/shared/routes/app.routes.dart';
 import 'package:kikagada/shared/routes/auth_routes.dart';
+import 'package:kikagada/shared/themes/app_bar_theme.dart';
 import 'package:kikagada/shared/themes/text_theme.dart';
 
 Future<void> main() async {
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF402319),
         useMaterial3: true,
         textTheme: CustomTextTheme.theme(),
+        appBarTheme: CustomAppBarTheme.theme(),
       ),
       routes: AppRoutes.routes(context),
       initialRoute: AuthRoutes.login,
