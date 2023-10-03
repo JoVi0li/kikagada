@@ -18,7 +18,7 @@ dependencies:
   mocktail: ^1.0.0
   cloud_firestore: ^4.9.2
   flutter_rating_bar: ^4.0.1
-  intl: ^0.18.1
+  firebase_storage: ^11.2.8
 
 dev_dependencies:
   flutter_test:

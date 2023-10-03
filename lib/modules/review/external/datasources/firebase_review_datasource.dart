@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/external/extensions/review_entity_extension.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 
-class FirestoreReviewDatasource implements IReviewDatasource {
-  FirestoreReviewDatasource({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+class FirebaseReviewDatasource implements IReviewDatasource {
+  FirebaseReviewDatasource(
+      {required FirebaseFirestore firestore, required FirebaseStorage storage})
+      : _firestore = firestore,
+        _storage = storage;
 
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
   @override
   Future<ReviewEntity> create(ReviewEntity review) async {
@@ -73,5 +79,31 @@ class FirestoreReviewDatasource implements IReviewDatasource {
               ),
             )
             .toList());
+  }
+
+  @override
+  Future<List<String>> uploadPhotos(List<String> photosPath) async {
+    final List<String> refToUploadedPhotos = [];
+    final imagesRef = _storage.ref().child('images');
+
+    for (int index = 0; index < photosPath.length; index++) {
+      final taskSnap = await imagesRef.putFile(File(photosPath[index]));
+      refToUploadedPhotos.add(taskSnap.ref.fullPath);
+    }
+
+    return refToUploadedPhotos;
+  }
+
+  @override
+  Future<List<String>> getPhotosDownloadURL(List<String> photosPath) async {
+    final List<String> photosDownloadURL = [];
+
+    for (int index = 0; index < photosPath.length; index++) {
+      photosDownloadURL.add(
+        await _storage.ref(photosPath[index]).getDownloadURL(),
+      );
+    }
+
+    return photosDownloadURL;
   }
 }

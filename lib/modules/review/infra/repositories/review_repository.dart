@@ -26,7 +26,7 @@ class ReviewRepository implements IReviewRepository {
     } on FirebaseException catch (e) {
       return (
         null,
-        GenericFirestoreReviewError(error: e.code, message: e.message)
+        GenericFirebaseReviewError(error: e.code, message: e.message)
       );
     } catch (e) {
       return (null, GenericReviewError(error: e.toString(), message: null));
@@ -40,7 +40,7 @@ class ReviewRepository implements IReviewRepository {
     } on FirebaseException catch (e) {
       return (
         null,
-        GenericFirestoreReviewError(error: e.code, message: e.message)
+        GenericFirebaseReviewError(error: e.code, message: e.message)
       );
     } catch (e) {
       return (null, GenericReviewError(error: e.toString(), message: null));
@@ -54,7 +54,7 @@ class ReviewRepository implements IReviewRepository {
     } on FirebaseException catch (e) {
       return (
         null,
-        GenericFirestoreReviewError(error: e.code, message: e.message)
+        GenericFirebaseReviewError(error: e.code, message: e.message)
       );
     } catch (e) {
       return (null, GenericReviewError(error: e.toString(), message: null));
@@ -71,7 +71,38 @@ class ReviewRepository implements IReviewRepository {
     } on FirebaseException catch (e) {
       return (
         null,
-        GenericFirestoreReviewError(error: e.code, message: e.message)
+        GenericFirebaseReviewError(error: e.code, message: e.message)
+      );
+    } catch (e) {
+      return (null, GenericReviewError(error: e.toString(), message: null));
+    }
+  }
+
+  @override
+  Future<(List<String>?, ReviewError?)> uploadPhotos(
+      List<String> photosPath) async {
+    try {
+      return (await _datasource.uploadPhotos(photosPath), null);
+    } on FirebaseException catch (e) {
+      return (
+        null,
+        GenericFirebaseReviewError(error: e.code, message: e.message)
+      );
+    } catch (e) {
+      return (null, GenericReviewError(error: e.toString(), message: null));
+    }
+  }
+
+  @override
+  Future<(List<String>?, ReviewError?)> getPhotosDownloadURL(
+    List<String> photosPath,
+  ) async {
+    try {
+      return (await _datasource.getPhotosDownloadURL(photosPath), null);
+    } on FirebaseException catch (e) {
+      return (
+        null,
+        GenericFirebaseReviewError(error: e.code, message: e.message)
       );
     } catch (e) {
       return (null, GenericReviewError(error: e.toString(), message: null));

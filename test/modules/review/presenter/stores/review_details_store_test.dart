@@ -31,7 +31,7 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = GenericFirestoreReviewError(error: 'error', message: null);
+    error = GenericFirebaseReviewError(error: 'error', message: null);
     registerFallbackValue("01");
     registerFallbackValue(review);
   });

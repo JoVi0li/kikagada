@@ -15,8 +15,8 @@ class GenericReviewError extends ReviewError {
   });
 }
 
-class GenericFirestoreReviewError extends ReviewError {
-  GenericFirestoreReviewError({
+class GenericFirebaseReviewError extends ReviewError {
+  GenericFirebaseReviewError({
     required super.error,
     required super.message,
   });

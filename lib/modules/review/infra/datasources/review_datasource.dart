@@ -9,4 +9,6 @@ abstract interface class IReviewDatasource {
     ReviewEntity? starterAfter,
     int? limit,
   );
+  Future<List<String>> uploadPhotos(List<String> photosPath);
+  Future<List<String>> getPhotosDownloadURL(List<String> photosPath);
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase.dart';
@@ -10,10 +11,11 @@ import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/delete_review_usecase/delete_review_usecase.dart';
+import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_reviews_usecase/get_reviews_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/update_review_usecase/update_review_usecase.dart';
-import 'package:kikagada/modules/review/external/datasources/firestore_review_datasource.dart';
+import 'package:kikagada/modules/review/external/datasources/firebase_review_datasource.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/presenter/stores/feed_store.dart';
@@ -41,8 +43,10 @@ final class Inject {
   }
 
   void reviewModule() {
-    _getIt.registerLazySingleton<IReviewDatasource>(
-        () => FirestoreReviewDatasource(firestore: FirebaseFirestore.instance));
+    _getIt.registerLazySingleton<IReviewDatasource>(() =>
+        FirebaseReviewDatasource(
+            firestore: FirebaseFirestore.instance,
+            storage: FirebaseStorage.instance));
     _getIt.registerLazySingleton<IReviewRepository>(
         () => ReviewRepository(datasource: _getIt()));
     _getIt.registerLazySingleton<ICreateReviewUsecase>(
@@ -55,10 +59,11 @@ final class Inject {
         () => DeleteReviewUsecase(repository: _getIt()));
     _getIt.registerLazySingleton<IGetReviewsUsecase>(
         () => GetReviewsUsecase(repository: _getIt()));
+    _getIt.registerLazySingleton<IGetPhotosDownloadURL>(
+        () => GetPhotosDownloadURL(repository: _getIt()));
     _getIt.registerLazySingleton<IReviewDetailsStore>(
-        () => ReviewDetailsStore(_getIt(), _getIt()));
-    _getIt.registerLazySingleton<IFeedStore>(
-        () => FeedStore(_getIt()));
+        () => ReviewDetailsStore(_getIt(), _getIt(), _getIt()));
+    _getIt.registerLazySingleton<IFeedStore>(() => FeedStore(_getIt()));
   }
 
   factory Inject.initialize() {
