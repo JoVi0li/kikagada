@@ -42,4 +42,36 @@ class FirestoreReviewDatasource implements IReviewDatasource {
     final docSnap = await _firestore.collection('reviews').doc(review.id).get();
     return ReviewEntityExtension.fromMap(docSnap.data()!);
   }
+
+  @override
+  Future<List<ReviewEntity>> getReviews(
+    ReviewEntity? starterAfter,
+    int? limit,
+  ) async {
+    if (starterAfter != null) {
+      return _firestore
+          .collection('reviews')
+          .startAfter([starterAfter])
+          .limit(limit ?? 25)
+          .get()
+          .then((querySnap) => querySnap.docs
+              .map(
+                (queryDocSnap) => ReviewEntityExtension.fromMap(
+                  queryDocSnap.data(),
+                ),
+              )
+              .toList());
+    }
+    return _firestore
+        .collection('reviews')
+        .limit(limit ?? 25)
+        .get()
+        .then((querySnap) => querySnap.docs
+            .map(
+              (queryDocSnap) => ReviewEntityExtension.fromMap(
+                queryDocSnap.data(),
+              ),
+            )
+            .toList());
+  }
 }

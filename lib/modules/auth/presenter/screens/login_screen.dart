@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/presenter/components/login_button.dart';
+import 'package:kikagada/modules/auth/presenter/controllers/login_controller.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,13 +15,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late final GetIt _getIt;
   late final LoginStore _store;
+  late final LoginController _controller;
 
   @override
   void initState() {
     super.initState();
     _getIt = GetIt.I;
     _store = _getIt<LoginStore>();
-    _store.verifyAuthState(context);
+    _controller = LoginController();
+    _store.verifyAuthState(
+      (user) async => await _controller.navigateToHomeScreen(context, user),
+    );
   }
 
   @override
@@ -58,12 +63,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? LoginButton(
                     icon: 'lib/shared/assets/icons/google.svg',
                     label: "Entrar com o Google",
-                    onPressed: () => _store.loginWithGoogle(context),
+                    onPressed: () => _store.loginWithGoogle(
+                      context,
+                      (user) async =>
+                          await _controller.navigateToHomeScreen(context, user),
+                    ),
                   )
                 : LoginButton(
                     icon: 'lib/shared/assets/icons/apple.svg',
                     label: "Entrar com a Apple",
-                    onPressed: () => _store.loginWithApple(context),
+                    onPressed: () => _store.loginWithApple(
+                      context,
+                      (user) async =>
+                          await _controller.navigateToHomeScreen(context, user),
+                    ),
                   ),
           ],
         ),

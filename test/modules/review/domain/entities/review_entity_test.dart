@@ -1,18 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kikagada/modules/review/domain/entities/note_entity.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 
 void main() {
-  late final NoteEntity note;
   late final ReviewEntity review;
 
   setUpAll(() {
-    note = NoteEntity(
-      id: "01",
-      authorId: "01",
-      reviewId: "01",
-      note: 5,
-    );
 
     review = ReviewEntity(
       id: "01",
@@ -21,7 +13,6 @@ void main() {
       updatedAt: DateTime.now(),
       title: "Post 01",
       body: "Post body",
-      note: note,
       photos: ["https://photo"],
     );
   });

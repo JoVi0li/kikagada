@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kikagada/modules/review/domain/entities/note_entity.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
@@ -15,7 +14,6 @@ class UpdateReviewUsecaseMock extends Mock implements IUpdateReviewUsecase {}
 void main() {
   late final IGetReviewByIdUsecase getReviewByIdUsecase;
   late final IUpdateReviewUsecase updateReviewUsecase;
-  late final NoteEntity note;
   late final ReviewEntity review;
   late final ReviewError error;
   late final ReviewDetailsStore store;
@@ -24,12 +22,6 @@ void main() {
     getReviewByIdUsecase = GetReviewByIdUsecaseMock();
     updateReviewUsecase = UpdateReviewUsecaseMock();
     store = ReviewDetailsStore(getReviewByIdUsecase, updateReviewUsecase);
-    note = NoteEntity(
-      id: "01",
-      authorId: "01",
-      reviewId: "01",
-      note: 10,
-    );
     review = ReviewEntity(
       id: "01",
       authorId: "01",
@@ -37,7 +29,6 @@ void main() {
       updatedAt: DateTime.now(),
       title: "Post 01",
       body: "Post body",
-      note: note,
       photos: ["https://photo"],
     );
     error = GenericFirestoreReviewError(error: 'error', message: null);

@@ -1,5 +1,3 @@
-import 'package:kikagada/modules/review/domain/entities/note_entity.dart';
-
 class ReviewEntity {
   final String id;
   final String authorId;
@@ -7,7 +5,6 @@ class ReviewEntity {
   final DateTime updatedAt;
   final String title;
   final String body;
-  final NoteEntity note;
   final List<String> photos;
 
   ReviewEntity({
@@ -17,7 +14,6 @@ class ReviewEntity {
     required this.updatedAt,
     required this.title,
     required this.body,
-    required this.note,
     required this.photos,
   })  : assert(photos.isNotEmpty, 'Required one photo least'),
         assert(title.isNotEmpty, 'Title can not be empty'),
@@ -30,7 +26,6 @@ class ReviewEntity {
     DateTime? updatedAt,
     String? title,
     String? body,
-    NoteEntity? note,
     List<String>? photos,
   }) {
     return ReviewEntity(
@@ -40,7 +35,6 @@ class ReviewEntity {
       updatedAt: updatedAt ?? this.updatedAt,
       title: title ?? this.title,
       body: body ?? this.body,
-      note: note ?? this.note,
       photos: photos ?? this.photos,
     );
   }

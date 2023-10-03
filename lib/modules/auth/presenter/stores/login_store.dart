@@ -5,7 +5,6 @@ import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase.d
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
 import 'package:kikagada/shared/components/error_dialog_component.dart';
-import 'package:kikagada/shared/routes/rank_routes.dart';
 
 class LoginStore extends ValueNotifier<LoginState> {
   LoginStore(this._loginWithGoogleUsecase, this._loginWithAppleUsecase)
@@ -14,7 +13,10 @@ class LoginStore extends ValueNotifier<LoginState> {
   final LoginWithGoogleUsecase _loginWithGoogleUsecase;
   final LoginWithAppleUsecase _loginWithAppleUsecase;
 
-  Future<void> loginWithGoogle(BuildContext context) async {
+  Future<void> loginWithGoogle(
+    BuildContext context,
+    void Function(UserEntity user) onLogin,
+  ) async {
     value = LoadingLoginState();
 
     final (user, error) = await _loginWithGoogleUsecase();
@@ -31,11 +33,14 @@ class LoginStore extends ValueNotifier<LoginState> {
 
     if (user != null) {
       value = SuccessLoginState(user: user);
-      navigateToHomeScreen(context, user);
+      onLogin(user);
     }
   }
 
-  Future<void> loginWithApple(BuildContext context) async {
+  Future<void> loginWithApple(
+    BuildContext context,
+    void Function(UserEntity user) onLogin,
+  ) async {
     value = LoadingLoginState();
 
     final (user, error) = await _loginWithAppleUsecase();
@@ -52,27 +57,20 @@ class LoginStore extends ValueNotifier<LoginState> {
 
     if (user != null) {
       value = SuccessLoginState(user: user);
-      navigateToHomeScreen(context, user);
+      onLogin(user);
     }
   }
 
-  void verifyAuthState(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        await navigateToHomeScreen(context, null);
+  void verifyAuthState(void Function(UserEntity user) onAuthenticated) {
+    FirebaseAuth.instance.authStateChanges().listen((User? fireUser) async {
+      if (fireUser != null) {
+        onAuthenticated(UserEntity(
+          id: fireUser.uid,
+          email: fireUser.email!,
+          name: fireUser.displayName!,
+          photo: fireUser.photoURL,
+        ));
       }
     });
-  }
-
-  Future<void> navigateToHomeScreen(
-    BuildContext context,
-    UserEntity? user,
-  ) async {
-    return await Navigator.pushNamedAndRemoveUntil<void>(
-      context,
-      RankRoutes.overview,
-      (route) => false,
-      arguments: user,
-    );
   }
 }

@@ -5,4 +5,8 @@ abstract interface class IReviewDatasource {
   Future<ReviewEntity> update(ReviewEntity review);
   Future<ReviewEntity> getById(String id);
   Future<ReviewEntity> delete(String id);
+  Future<List<ReviewEntity>> getReviews(
+    ReviewEntity? starterAfter,
+    int? limit,
+  );
 }

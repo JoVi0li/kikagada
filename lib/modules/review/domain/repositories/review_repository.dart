@@ -10,4 +10,8 @@ abstract interface class IReviewRepository {
   );
   Future<(ReviewEntity? success, ReviewError? error)> getById(String id);
   Future<(ReviewEntity? success, ReviewError? error)> delete(String id);
+  Future<(List<ReviewEntity>? success, ReviewError? error)> getReviews(
+    ReviewEntity? starterAfter,
+    int? limit,
+  );
 }

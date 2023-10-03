@@ -1,5 +1,4 @@
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/external/extensions/note_entity_extension.dart';
 
 extension ReviewEntityExtension on ReviewEntity {
   static Map<String, dynamic> toMap(ReviewEntity review) {
@@ -10,7 +9,6 @@ extension ReviewEntityExtension on ReviewEntity {
       'updatedAt': review.updatedAt,
       'title': review.title,
       'body': review.body,
-      'note': review.note,
       'photos': review.photos,
     };
   }
@@ -23,7 +21,6 @@ extension ReviewEntityExtension on ReviewEntity {
       updatedAt: DateTime.parse(review['updatedAt']),
       title: review['title'],
       body: review['body'],
-      note: NoteEntityExtension.fromMap(review['note']),
       photos: List<String>.from(review['photos']),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kikagada/modules/review/domain/entities/note_entity.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
@@ -12,19 +11,12 @@ class ReviewDatasourceMock extends Mock implements IReviewDatasource {}
 void main() {
   late IReviewDatasource datasource;
   late IReviewRepository repository;
-  late final NoteEntity note;
   late final ReviewEntity review;
   late final ReviewError error;
 
   setUpAll(() {
     datasource = ReviewDatasourceMock();
     repository = ReviewRepository(datasource: datasource);
-    note = NoteEntity(
-      id: "01",
-      authorId: "01",
-      reviewId: "01",
-      note: 10,
-    );
     review = ReviewEntity(
       id: "01",
       authorId: "01",
@@ -32,7 +24,6 @@ void main() {
       updatedAt: DateTime.now(),
       title: "Post 01",
       body: "Post body",
-      note: note,
       photos: ["https://photo"],
     );
     error = GenericFirestoreReviewError(error: 'error', message: null);
