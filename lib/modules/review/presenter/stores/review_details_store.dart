@@ -17,7 +17,7 @@ class ReviewDetailsStore extends ValueNotifier<ReviewDetailsState>
     this._getReviewByIdUsecase,
     this._updateReviewUsecase,
     this._getPhotosDownloadURL,
-  ) : super(InitialReviewDetailsState());
+  ) : super(LoadingReviewDetailsState());
 
   final IGetReviewByIdUsecase _getReviewByIdUsecase;
   final IUpdateReviewUsecase _updateReviewUsecase;

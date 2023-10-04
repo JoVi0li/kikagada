@@ -3,13 +3,14 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/states/review_details_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/error_review_details_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/initial_review_details_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/loading_review_details_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/success_review_details_widget.dart';
 import 'package:kikagada/shared/components/app_bar_component.dart';
 
 class ReviewDetailsScreen extends StatefulWidget {
-  const ReviewDetailsScreen({super.key});
+  const ReviewDetailsScreen({super.key, required this.reviewId});
+
+  final String reviewId;
 
   @override
   State<ReviewDetailsScreen> createState() => _ReviewDetailsScreenState();
@@ -24,9 +25,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
     super.initState();
     _getIt = GetIt.I;
     _store = _getIt<IReviewDetailsStore>();
-
-    /// TODO: Remove hard code
-    _store.getById('7oWfRpUq6u7voSWVhvbk');
+    _store.getById(widget.reviewId);
   }
 
   @override
@@ -40,15 +39,13 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.sizeOf(context).width, 60),
-        child: const AppBarComponent(title: 'Review'),
+        child: const AppBarComponent(title: 'Review', hasBackButton: true),
       ),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,
           builder: (context, state, child) {
             switch (state) {
-              case InitialReviewDetailsState():
-                return const InitialReviewDetailsWidget();
               case LoadingReviewDetailsState():
                 return const LoadingReviewDetailsWidget();
               case SuccessReviewDetailsState():
@@ -56,7 +53,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               case ErrorReviewDetailsState():
                 return ErrorReviewDetailsWidget(error: state.error);
               default:
-                return const InitialReviewDetailsWidget();
+                return const LoadingReviewDetailsWidget();
             }
           },
         ),

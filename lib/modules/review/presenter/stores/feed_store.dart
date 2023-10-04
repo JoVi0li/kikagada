@@ -8,7 +8,9 @@ abstract interface class IFeedStore extends ValueListenable<FeedState> {
 }
 
 final class FeedStore extends ValueNotifier<FeedState> implements IFeedStore {
-  FeedStore(this.getReviewsUsecase) : super(FeedInitialState());
+  FeedStore(this.getReviewsUsecase) : super(FeedLoadingState()) {
+    getReviews(null, null);
+  }
 
   late final IGetReviewsUsecase getReviewsUsecase;
 
@@ -23,7 +25,12 @@ final class FeedStore extends ValueNotifier<FeedState> implements IFeedStore {
       return;
     }
 
-    if (success != null) {
+    if (success != null && success.isEmpty) {
+      value = FeedEmptyState();
+      return;
+    }
+
+    if (success != null && success.isNotEmpty) {
       value = FeedSuccessState(value: success);
       return;
     }

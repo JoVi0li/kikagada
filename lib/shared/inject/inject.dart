@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
@@ -46,7 +47,8 @@ final class Inject {
     _getIt.registerLazySingleton<IReviewDatasource>(() =>
         FirebaseReviewDatasource(
             firestore: FirebaseFirestore.instance,
-            storage: FirebaseStorage.instance));
+            storage: FirebaseStorage.instance,
+            auth: FirebaseAuth.instance));
     _getIt.registerLazySingleton<IReviewRepository>(
         () => ReviewRepository(datasource: _getIt()));
     _getIt.registerLazySingleton<ICreateReviewUsecase>(

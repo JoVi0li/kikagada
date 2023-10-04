@@ -3,6 +3,7 @@ import 'package:kikagada/shared/routes/review_routes.dart';
 
 abstract interface class IFeedController {
   Future<void> navigateToReviewDetails(BuildContext context, String reviewId);
+  Future<void> navigateToCreateReview(BuildContext context);
 }
 
 class FeedController implements IFeedController {
@@ -16,5 +17,10 @@ class FeedController implements IFeedController {
       ReviewRoutes.details,
       arguments: reviewId,
     );
+  }
+
+  @override
+  Future<void> navigateToCreateReview(BuildContext context) async {
+    return Navigator.pushNamed<void>(context, ReviewRoutes.create);
   }
 }

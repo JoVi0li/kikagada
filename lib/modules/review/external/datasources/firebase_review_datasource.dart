@@ -1,25 +1,32 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/external/extensions/review_entity_extension.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 
 class FirebaseReviewDatasource implements IReviewDatasource {
-  FirebaseReviewDatasource(
-      {required FirebaseFirestore firestore, required FirebaseStorage storage})
-      : _firestore = firestore,
-        _storage = storage;
+  FirebaseReviewDatasource({
+    required FirebaseFirestore firestore,
+    required FirebaseStorage storage,
+    required FirebaseAuth auth,
+  })  : _firestore = firestore,
+        _storage = storage,
+        _auth = auth;
 
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
+  final FirebaseAuth _auth;
 
   @override
   Future<ReviewEntity> create(ReviewEntity review) async {
     return await _firestore
         .collection('reviews')
-        .add(ReviewEntityExtension.toMap(review))
+        .add(ReviewEntityExtension.toMap(
+          review.copyWith(authorId: _auth.currentUser!.uid),
+        ))
         .then((docRef) async => await docRef
             .get()
             .then((docSnap) => ReviewEntityExtension.fromMap(docSnap.data()!)));

@@ -4,7 +4,7 @@ import 'package:kikagada/modules/review/presenter/controllers/feed_controller.da
 import 'package:kikagada/modules/review/presenter/states/feed_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/feed_store.dart';
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_error_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_initial_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_empty_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_loading_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/feed_widgets/feed_success_widget.dart';
 import 'package:kikagada/shared/components/app_bar_component.dart';
@@ -27,7 +27,6 @@ class _FeedScreenState extends State<FeedScreen> {
     _getIt = GetIt.I;
     _store = _getIt<IFeedStore>();
     _controller = FeedController();
-    _store.getReviews(null, null);
   }
 
   @override
@@ -48,26 +47,31 @@ class _FeedScreenState extends State<FeedScreen> {
           valueListenable: _store,
           builder: (ctx, state, widget) {
             switch (state) {
-              case FeedInitialState():
-                return const FeedInitialWidget();
+              case FeedEmptyState():
+                return const FeedEmptyWidget();
               case FeedLoadingState():
                 return const FeedLoadingWidget();
               case FeedSuccessState():
                 return FeedSuccessWidget(
                   reviews: state.value,
-                  onClick: (reviewId) async => await _controller
-                      .navigateToReviewDetails(context, reviewId),
+                  onClick: (reviewId) async {
+                    await _controller.navigateToReviewDetails(
+                      context,
+                      reviewId,
+                    );
+                    debugPrint(reviewId + ' reviewId');
+                  },
                 );
               case FeedErrorState():
                 return FeedErrorWidget(error: state.error);
               default:
-                return const FeedInitialWidget();
+                return const FeedEmptyWidget();
             }
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _controller.navigateToCreateReview(context),
         child: const Icon(Icons.add),
       ),
     );

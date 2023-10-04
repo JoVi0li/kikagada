@@ -3,7 +3,7 @@ import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 
 abstract base class FeedState {}
 
-final class FeedInitialState extends FeedState {}
+final class FeedEmptyState extends FeedState {}
 
 final class FeedLoadingState extends FeedState {}
 

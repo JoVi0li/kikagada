@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppBarComponent extends StatelessWidget {
-  const AppBarComponent({super.key, required this.title});
+  const AppBarComponent({
+    super.key,
+    required this.title,
+    this.hasBackButton = false,
+  });
 
   final String title;
+  final bool hasBackButton;
 
-  bool canPop(BuildContext context) {
-    return Navigator.canPop(context);
-  }
 
   void pop(BuildContext context) {
     Navigator.pop(context);
@@ -18,7 +20,7 @@ class AppBarComponent extends StatelessWidget {
     return AppBar(
       title: Text(title),
       titleTextStyle: Theme.of(context).textTheme.titleLarge,
-      leading: canPop(context)
+      leading: hasBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () => pop(context),

@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: CustomAppBarTheme.theme(),
       ),
       routes: AppRoutes.routes(context),
+      onGenerateRoute: AppRoutes.onGenerateRoute,
       initialRoute: AuthRoutes.login,
     );
   }

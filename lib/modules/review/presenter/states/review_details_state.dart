@@ -3,8 +3,6 @@ import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 
 abstract class ReviewDetailsState {}
 
-class InitialReviewDetailsState extends ReviewDetailsState {}
-
 class LoadingReviewDetailsState extends ReviewDetailsState {}
 
 class SuccessReviewDetailsState extends ReviewDetailsState {
