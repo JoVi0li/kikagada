@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/components/error_dialog_component.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract interface class ICreateReviewController {
+  late final GlobalKey<FormState> formKey;
   late final TextEditingController titleController;
   late final TextEditingController bodyController;
   late List<File> photos;
@@ -15,11 +16,15 @@ abstract interface class ICreateReviewController {
   Future<(List<File>? photos, ReviewError? error)> pickPhotos(
     BuildContext context,
   );
+  String? validator(String field, String? value);
+  Future<bool> photosValidator(BuildContext context);
 }
 
 class CreateReviewController implements ICreateReviewController {
   CreateReviewController();
 
+  @override
+  late GlobalKey<FormState> formKey;
   @override
   late final TextEditingController titleController;
   @override
@@ -29,6 +34,7 @@ class CreateReviewController implements ICreateReviewController {
 
   @override
   void initController() {
+    formKey = GlobalKey<FormState>();
     titleController = TextEditingController();
     bodyController = TextEditingController();
     photos = [];
@@ -89,5 +95,32 @@ class CreateReviewController implements ICreateReviewController {
 
   Future<PermissionStatus> askPermissionToAccessPhoto() async {
     return await Permission.photos.request();
+  }
+
+  @override
+  String? validator(String field, String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Informe um $field para sua review';
+    }
+
+    if (value.length < 3) {
+      return 'O $field precisa de ao menos 3 caracteres';
+    }
+
+    return null;
+  }
+
+  @override
+  Future<bool> photosValidator(BuildContext context) async {
+    if (photos.isEmpty) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => const ErrorDialogComponent(
+            errorMessage: 'Selecione ao menos uma foto para a review'),
+      );
+      return false;
+    }
+
+    return true;
   }
 }

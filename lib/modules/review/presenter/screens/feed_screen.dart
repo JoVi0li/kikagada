@@ -59,7 +59,6 @@ class _FeedScreenState extends State<FeedScreen> {
                       context,
                       reviewId,
                     );
-                    debugPrint(reviewId + ' reviewId');
                   },
                 );
               case FeedErrorState():

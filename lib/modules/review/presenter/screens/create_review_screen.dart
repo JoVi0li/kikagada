@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/presenter/controllers/create_review_controller.dart';
+import 'package:kikagada/modules/review/presenter/states/create_review_state.dart';
+import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
+import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_error_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_initial_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_loading_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_success_widget.dart';
 import 'package:kikagada/shared/components/app_bar_component.dart';
-import 'package:kikagada/shared/components/error_dialog_component.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateReviewScreen extends StatefulWidget {
   const CreateReviewScreen({super.key});
@@ -11,32 +19,40 @@ class CreateReviewScreen extends StatefulWidget {
 }
 
 class _CreateReviewScreenState extends State<CreateReviewScreen> {
+  late final GetIt _getIt;
   late final ICreateReviewController _controller;
+  late final ICreateReviewStore _store;
 
   @override
   void initState() {
     super.initState();
+    _getIt = GetIt.I;
     _controller = CreateReviewController();
     _controller.initController();
+    _store = _getIt<ICreateReviewStore>();
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.disposeController();
+    _getIt.resetLazySingleton<ICreateReviewStore>();
   }
 
-  Future<void> pickImages(BuildContext context) async {
-    final (_, error) = await _controller.pickPhotos(context);
-
-    setState(() {});
-
-    if (error != null) {
-      showDialog(
-        context: context,
-        builder: (ctx) => ErrorDialogComponent(errorMessage: error.error),
-      );
-    }
+  Future<void> createReview() async {
+    const uuid = Uuid();
+    final date = DateTime.now();
+    if (!(_controller.formKey.currentState!.validate())) return;
+    final review = ReviewEntity(
+      id: uuid.v4(),
+      authorId: '',
+      createdAt: date,
+      updatedAt: date,
+      title: _controller.titleController.text,
+      body: _controller.bodyController.text,
+      photos: _controller.photos.map((file) => file.path).toList(),
+    );
+    await _store.createReview(review);
   }
 
   @override
@@ -49,71 +65,28 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           hasBackButton: true,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _controller.titleController,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.white),
-                maxLength: 50,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Título',
-                ),
-              ),
-              const SizedBox(height: 32),
-              TextFormField(
-                controller: _controller.bodyController,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.white),
-                maxLines: 10,
-                maxLength: 1200,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Relato',
-                ),
-              ),
-              const SizedBox(height: 32),
-              TextButton(
-                onPressed: () async => await pickImages(context),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.upload,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      'Subir fotos',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: _controller.photos.length,
-                  itemBuilder: (ctx, index) {
-                    return ListTile(
-                        title: Text(_controller.photos[index].path));
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+      body: ValueListenableBuilder(
+        valueListenable: _store,
+        builder: (ctx, state, widget) {
+          switch (state) {
+            case CreateReviewInitialState():
+              return CreateReviewInitialWidget(
+                _controller,
+                onPressed: createReview,
+              );
+            case CreateReviewLoadingState():
+              return const CreateReviewLoadingWidget();
+            case CreateReviewSuccessState():
+              return const CreateReviewSuccessWidget();
+            case CreateReviewErrorState():
+              return CreateReviewErrorWidget(error: state.error);
+            default:
+              return CreateReviewInitialWidget(
+                _controller,
+                onPressed: createReview,
+              );
+          }
+        },
       ),
     );
   }

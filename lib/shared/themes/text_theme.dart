@@ -18,6 +18,11 @@ class CustomTextTheme {
         color: Colors.white,
         fontWeight: FontWeight.w500,
       ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.normal
+      ),
     );
   }
 }

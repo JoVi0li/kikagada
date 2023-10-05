@@ -5,8 +5,8 @@ extension ReviewEntityExtension on ReviewEntity {
     return {
       'id': review.id,
       'authorId': review.authorId,
-      'createdAt': review.createdAt,
-      'updatedAt': review.updatedAt,
+      'createdAt': review.createdAt.toString(),
+      'updatedAt': review.updatedAt.toString(),
       'title': review.title,
       'body': review.body,
       'photos': review.photos,

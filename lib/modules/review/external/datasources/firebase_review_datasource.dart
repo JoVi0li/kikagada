@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/external/extensions/review_entity_extension.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseReviewDatasource implements IReviewDatasource {
   FirebaseReviewDatasource({
@@ -24,12 +25,11 @@ class FirebaseReviewDatasource implements IReviewDatasource {
   Future<ReviewEntity> create(ReviewEntity review) async {
     return await _firestore
         .collection('reviews')
-        .add(ReviewEntityExtension.toMap(
+        .doc(review.id)
+        .set(ReviewEntityExtension.toMap(
           review.copyWith(authorId: _auth.currentUser!.uid),
         ))
-        .then((docRef) async => await docRef
-            .get()
-            .then((docSnap) => ReviewEntityExtension.fromMap(docSnap.data()!)));
+        .then((_) => review);
   }
 
   @override
@@ -90,11 +90,12 @@ class FirebaseReviewDatasource implements IReviewDatasource {
 
   @override
   Future<List<String>> uploadPhotos(List<String> photosPath) async {
+    const uuid = Uuid();
     final List<String> refToUploadedPhotos = [];
-    final imagesRef = _storage.ref().child('images');
 
     for (int index = 0; index < photosPath.length; index++) {
-      final taskSnap = await imagesRef.putFile(File(photosPath[index]));
+      final imageRef = _storage.ref().child('images/${uuid.v4()}');
+      final taskSnap = await imageRef.putFile(File(photosPath[index]));
       refToUploadedPhotos.add(taskSnap.ref.fullPath);
     }
 
