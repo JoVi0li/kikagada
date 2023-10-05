@@ -64,6 +64,7 @@ class FirebaseReviewDatasource implements IReviewDatasource {
     if (starterAfter != null) {
       return _firestore
           .collection('reviews')
+          .orderBy('updatedAt', descending: true)
           .startAfter([starterAfter])
           .limit(limit ?? 25)
           .get()
@@ -77,6 +78,7 @@ class FirebaseReviewDatasource implements IReviewDatasource {
     }
     return _firestore
         .collection('reviews')
+        .orderBy('updatedAt', descending: true)
         .limit(limit ?? 25)
         .get()
         .then((querySnap) => querySnap.docs

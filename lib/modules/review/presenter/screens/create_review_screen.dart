@@ -39,7 +39,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     _getIt.resetLazySingleton<ICreateReviewStore>();
   }
 
-  Future<void> createReview() async {
+  Future<void> createReview(BuildContext context) async {
     const uuid = Uuid();
     final date = DateTime.now();
     if (!(_controller.formKey.currentState!.validate())) return;
@@ -52,7 +52,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       body: _controller.bodyController.text,
       photos: _controller.photos.map((file) => file.path).toList(),
     );
-    await _store.createReview(review);
+    await _store.createReview(review, context);
   }
 
   @override
@@ -72,7 +72,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             case CreateReviewInitialState():
               return CreateReviewInitialWidget(
                 _controller,
-                onPressed: createReview,
+                onPressed: () => createReview(context),
               );
             case CreateReviewLoadingState():
               return const CreateReviewLoadingWidget();
@@ -83,7 +83,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             default:
               return CreateReviewInitialWidget(
                 _controller,
-                onPressed: createReview,
+                onPressed: () => createReview(context),
               );
           }
         },
