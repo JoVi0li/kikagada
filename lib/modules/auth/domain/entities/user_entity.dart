@@ -23,12 +23,12 @@ class UserEntity {
     );
   }
 
-  UserEntity copyWith(
+  UserEntity copyWith({
     String? id,
     String? name,
     String? email,
     String? photo,
-  ) {
+  }) {
     return UserEntity(
       id: id ?? this.id,
       name: name ?? this.name,
