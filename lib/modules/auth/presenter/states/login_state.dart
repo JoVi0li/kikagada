@@ -1,18 +1,18 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 
-sealed class LoginState {}
+abstract base class LoginState {}
 
-class InitialLoginState implements LoginState {}
+final class LoginInitialState implements LoginState {}
 
-class LoadingLoginState implements LoginState {}
+final class LoginLoadingState implements LoginState {}
 
-class SuccessLoginState implements LoginState {
+final class LoginSuccessState implements LoginState {
   final UserEntity user;
-  SuccessLoginState({required this.user});
+  LoginSuccessState({required this.user});
 }
 
-class ErrorLoginState implements LoginState {
+final class LoginErrorState implements LoginState {
   final AuthError error;
-  ErrorLoginState({required this.error});
+  LoginErrorState({required this.error});
 }

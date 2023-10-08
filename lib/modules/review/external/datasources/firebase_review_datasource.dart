@@ -9,6 +9,10 @@ import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart
 import 'package:uuid/uuid.dart';
 
 class FirebaseReviewDatasource implements IReviewDatasource {
+  final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
+  final FirebaseAuth _auth;
+
   FirebaseReviewDatasource({
     required FirebaseFirestore firestore,
     required FirebaseStorage storage,
@@ -16,10 +20,6 @@ class FirebaseReviewDatasource implements IReviewDatasource {
   })  : _firestore = firestore,
         _storage = storage,
         _auth = auth;
-
-  final FirebaseFirestore _firestore;
-  final FirebaseStorage _storage;
-  final FirebaseAuth _auth;
 
   @override
   Future<ReviewEntity> create(ReviewEntity review) async {

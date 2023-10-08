@@ -1,15 +1,12 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
+import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
 
-abstract class LoginWithGoogleUsecase {
-  Future<(UserEntity? user, AuthError? error)> call();
-}
+final class LoginWithGoogleUsecaseImp implements ILoginWithGoogleUsecase {
+  final IAuthRepository _repository;
 
-class LoginWithGoogleUsecaseImp implements LoginWithGoogleUsecase {
-  final AuthRepository _repository;
-
-  LoginWithGoogleUsecaseImp({required AuthRepository repository})
+  LoginWithGoogleUsecaseImp({required IAuthRepository repository})
       : _repository = repository;
 
   @override

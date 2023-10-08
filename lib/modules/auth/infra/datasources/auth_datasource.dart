@@ -1,6 +1,6 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 
-abstract class AuthDatasource {
+abstract interface class IAuthDatasource {
   Future<UserEntity> loginWithGoogle();
   Future<UserEntity> loginWithApple();
 }

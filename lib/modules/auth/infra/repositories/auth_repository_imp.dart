@@ -4,10 +4,10 @@ import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
 
-class AuthRepositoryImp implements AuthRepository {
-  final AuthDatasource _datasource;
+final class AuthRepositoryImp implements IAuthRepository {
+  final IAuthDatasource _datasource;
 
-  AuthRepositoryImp({required AuthDatasource datasource})
+  AuthRepositoryImp({required IAuthDatasource datasource})
       : _datasource = datasource;
 
   @override

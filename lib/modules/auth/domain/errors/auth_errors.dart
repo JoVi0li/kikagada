@@ -8,14 +8,14 @@ sealed class AuthError extends Error {
   });
 }
 
-class GenericAuthError extends AuthError {
+final class GenericAuthError extends AuthError {
   GenericAuthError({
     required super.error,
     required super.message,
   });
 }
 
-class GenericFirebaseAuthError extends AuthError {
+final class GenericFirebaseAuthError extends AuthError {
   GenericFirebaseAuthError({
     required super.error,
     required super.message,

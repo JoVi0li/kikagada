@@ -10,4 +10,13 @@ class UserEntity {
     required this.email,
     required this.photo,
   });
+
+  factory UserEntity.fromMap(Map<String, dynamic> map) {
+    return UserEntity(
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      photo: map['photo'],
+    );
+  }
 }

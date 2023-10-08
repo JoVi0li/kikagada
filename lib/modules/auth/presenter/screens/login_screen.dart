@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              "Compartilhe suas experiências e faça ranks dos melhores aos piores banheiros",
+              "Compartilhe suas experiências dos melhores ou piores banheiros",
               style: Theme.of(context).textTheme.titleSmall,
               textAlign: TextAlign.center,
             ),

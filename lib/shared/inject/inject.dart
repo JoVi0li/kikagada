@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
-import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase.dart';
-import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase_imp.dart';
+import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase_imp.dart';
 import 'package:kikagada/modules/auth/external/datasource/firebase_auth_datasource_imp.dart';
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
 import 'package:kikagada/modules/auth/infra/repositories/auth_repository_imp.dart';
@@ -33,13 +35,13 @@ final class Inject {
   }
 
   void authModule() {
-    _getIt.registerLazySingleton<AuthDatasource>(
-        () => FirebaseAuthDatasourceImp());
-    _getIt.registerLazySingleton<AuthRepository>(
+    _getIt.registerLazySingleton<IAuthDatasource>(
+        () => FirebaseAuthDatasourceImp(auth: FirebaseAuth.instance));
+    _getIt.registerLazySingleton<IAuthRepository>(
         () => AuthRepositoryImp(datasource: _getIt()));
-    _getIt.registerLazySingleton<LoginWithGoogleUsecase>(
+    _getIt.registerLazySingleton<ILoginWithGoogleUsecase>(
         () => LoginWithGoogleUsecaseImp(repository: _getIt()));
-    _getIt.registerLazySingleton<LoginWithAppleUsecase>(
+    _getIt.registerLazySingleton<ILoginWithAppleUsecase>(
         () => LoginWithAppleUsecaseImp(repository: _getIt()));
     _getIt.registerLazySingleton<LoginStore>(
         () => LoginStore(_getIt(), _getIt()));
