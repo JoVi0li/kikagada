@@ -47,12 +47,6 @@ class LoginStore extends ValueNotifier<LoginState> {
 
     if (error != null) {
       value = LoginErrorState(error: error);
-      showDialog(
-        context: context,
-        builder: (BuildContext ctx) => ErrorDialogComponent(
-          errorMessage: error.message ?? error.error,
-        ),
-      );
     }
 
     if (user != null) {
