@@ -13,7 +13,7 @@ void main() {
     );
   });
 
-  group('UserEntity tests...', () {
+  group('user entity tests...', () {
     test('Should create correctly a entity copy from UserEntity', () {
       expect(user.copyWith(), isA<UserEntity>());
     });

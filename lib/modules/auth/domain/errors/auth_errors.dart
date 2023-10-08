@@ -5,19 +5,19 @@ sealed class AuthError extends Error {
   AuthError({
     required this.error,
     this.message,
-  });
+  }) : assert(error.isNotEmpty, 'message property can not be empty');
 }
 
 final class GenericAuthError extends AuthError {
   GenericAuthError({
     required super.error,
-    required super.message,
+    super.message,
   });
 }
 
 final class GenericFirebaseAuthError extends AuthError {
   GenericFirebaseAuthError({
     required super.error,
-    required super.message,
+    super.message,
   });
 }
