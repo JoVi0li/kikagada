@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/update_review_usecase/update_review_usecase.dart';
 import 'package:kikagada/modules/review/presenter/states/review_details_state.dart';
@@ -11,9 +12,12 @@ class GetReviewByIdUsecaseMock extends Mock implements IGetReviewByIdUsecase {}
 
 class UpdateReviewUsecaseMock extends Mock implements IUpdateReviewUsecase {}
 
+class GetPhotosDownloadURLMock extends Mock implements IGetPhotosDownloadURL {}
+
 void main() {
   late final IGetReviewByIdUsecase getReviewByIdUsecase;
   late final IUpdateReviewUsecase updateReviewUsecase;
+  late final IGetPhotosDownloadURL getPhotosDownloadURL;
   late final ReviewEntity review;
   late final ReviewError error;
   late final ReviewDetailsStore store;
@@ -21,7 +25,12 @@ void main() {
   setUpAll(() {
     getReviewByIdUsecase = GetReviewByIdUsecaseMock();
     updateReviewUsecase = UpdateReviewUsecaseMock();
-    store = ReviewDetailsStore(getReviewByIdUsecase, updateReviewUsecase);
+    getPhotosDownloadURL = GetPhotosDownloadURLMock();
+    store = ReviewDetailsStore(
+      getReviewByIdUsecase,
+      updateReviewUsecase,
+      getPhotosDownloadURL,
+    );
     review = ReviewEntity(
       id: "01",
       authorId: "01",
@@ -34,15 +43,18 @@ void main() {
     error = GenericFirebaseReviewError(error: 'error', message: null);
     registerFallbackValue("01");
     registerFallbackValue(review);
+    registerFallbackValue([""]);
   });
   group('review details store tests', () {
-    test('should return initial state on create store', () {
-      expect(store.value, isA<InitialReviewDetailsState>());
+    test('should return loading state on create store', () {
+      expect(store.value, isA<LoadingReviewDetailsState>());
     });
 
     test('should return loading state while execute tasks', () async {
       when(() => getReviewByIdUsecase(any()))
           .thenAnswer((_) => Future.value((review, null)));
+      when(() => getPhotosDownloadURL(any()))
+          .thenAnswer((_) => Future.value(([''], null)));
 
       final getById = store.getById('01');
 
@@ -54,6 +66,8 @@ void main() {
     test('should return success state on getById', () async {
       when(() => getReviewByIdUsecase(any()))
           .thenAnswer((_) => Future.value((review, null)));
+      when(() => getPhotosDownloadURL(any()))
+          .thenAnswer((_) => Future.value(([''], null)));
 
       await store.getById("01");
 

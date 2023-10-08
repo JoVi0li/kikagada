@@ -22,12 +22,6 @@ void main() {
 
   group('review details state tests', () {
     test(
-      'InitialReviewDetailsState should be a subclass from ReviewDetailsState',
-      () {
-        expect(InitialReviewDetailsState(), isA<ReviewDetailsState>());
-      },
-    );
-    test(
       'LoadingReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
         expect(LoadingReviewDetailsState(), isA<ReviewDetailsState>());
