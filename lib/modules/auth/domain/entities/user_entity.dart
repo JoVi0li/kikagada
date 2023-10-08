@@ -22,4 +22,18 @@ class UserEntity {
       photo: map['photo'],
     );
   }
+
+  UserEntity copyWith(
+    String? id,
+    String? name,
+    String? email,
+    String? photo,
+  ) {
+    return UserEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      photo: photo ?? this.photo,
+    );
+  }
 }
