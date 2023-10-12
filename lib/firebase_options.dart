@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAykNxapFyeOXUAlJrn1v-jYAp5qSLRtQM',
-    appId: '1:405829735179:android:0535f71b509cc789de480e',
+    appId: '1:405829735179:android:157ec7821b41a792de480e',
     messagingSenderId: '405829735179',
     projectId: 'kikagada-38625',
     storageBucket: 'kikagada-38625.appspot.com',
@@ -59,10 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDm9xf6K1ZSvmKXypgGXyJlZhDjYdymqfM',
-    appId: '1:405829735179:ios:1984c9c634c8994bde480e',
+    appId: '1:405829735179:ios:7431bdda9d237c5ade480e',
     messagingSenderId: '405829735179',
     projectId: 'kikagada-38625',
     storageBucket: 'kikagada-38625.appspot.com',
+    androidClientId: '405829735179-8fjc3desp3f4bjknb1uj06oqqaprnb9t.apps.googleusercontent.com',
+    iosClientId: '405829735179-0vgd8ovinl7anvkpck6mg0808b7tjo15.apps.googleusercontent.com',
     iosBundleId: 'com.example.kikagada',
   );
 }
