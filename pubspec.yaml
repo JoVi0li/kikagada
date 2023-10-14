@@ -38,21 +38,21 @@ flutter:
     - lib/shared/assets/icons/
 
   fonts:
-    - family: FiraSans
+    - family: Barlow
       fonts:
-        - asset: lib/shared/assets/fonts/FiraSans-Black.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Black.ttf
           weight: 900
-        - asset: lib/shared/assets/fonts/FiraSans-ExtraBold.ttf
+        - asset: lib/shared/assets/fonts/Barlow-ExtraBold.ttf
           weight: 800
-        - asset: lib/shared/assets/fonts/FiraSans-Bold.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Bold.ttf
           weight: 700
-        - asset: lib/shared/assets/fonts/FiraSans-SemiBold.ttf
+        - asset: lib/shared/assets/fonts/Barlow-SemiBold.ttf
           weight: 600
-        - asset: lib/shared/assets/fonts/FiraSans-Medium.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Medium.ttf
           weight: 500
-        - asset: lib/shared/assets/fonts/FiraSans-Regular.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Regular.ttf
           weight: 400
-        - asset: lib/shared/assets/fonts/FiraSans-Light.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Light.ttf
           weight: 300
-        - asset: lib/shared/assets/fonts/FiraSans-Thin.ttf
+        - asset: lib/shared/assets/fonts/Barlow-Thin.ttf
           weight: 200

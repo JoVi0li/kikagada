@@ -4,7 +4,7 @@ class CustomTextTheme {
   static TextTheme theme() {
     return const TextTheme(
       titleLarge: TextStyle(
-          fontFamily: 'FiraSans',
+          fontFamily: 'Barlow',
           fontSize: 32,
           color: Colors.white,
           fontWeight: FontWeight.w900),
