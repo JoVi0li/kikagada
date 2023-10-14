@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/presenter/components/selected_files_preview_component.dart';
 import 'package:kikagada/modules/review/presenter/controllers/create_review_controller.dart';
-import 'package:kikagada/shared/components/error_dialog_component.dart';
 
 class CreateReviewInitialWidget extends StatefulWidget {
   const CreateReviewInitialWidget(this._controller,
@@ -23,10 +22,7 @@ class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
     setState(() {});
 
     if (error != null) {
-      showDialog(
-        context: context,
-        builder: (ctx) => ErrorDialogComponent(errorMessage: error.error),
-      );
+      /// TODO: implement error dialog 
     }
   }
 

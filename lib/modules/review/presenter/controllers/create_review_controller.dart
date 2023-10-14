@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
-import 'package:kikagada/shared/components/error_dialog_component.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract interface class ICreateReviewController {
@@ -113,11 +112,7 @@ class CreateReviewController implements ICreateReviewController {
   @override
   Future<bool> photosValidator(BuildContext context) async {
     if (photos.isEmpty) {
-      await showDialog(
-        context: context,
-        builder: (ctx) => const ErrorDialogComponent(
-            errorMessage: 'Selecione ao menos uma foto para a review'),
-      );
+      /// TODO: implement error dialog
       return false;
     }
 

@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
+import 'package:flutter/foundation.dart';
+import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
-import 'package:kikagada/shared/components/error_dialog_component.dart';
 
 class LoginStore extends ValueNotifier<LoginState> {
   final ILoginWithGoogleUsecase _loginWithGoogleUsecase;
@@ -13,34 +11,33 @@ class LoginStore extends ValueNotifier<LoginState> {
   LoginStore(this._loginWithGoogleUsecase, this._loginWithAppleUsecase)
       : super(LoginInitialState());
 
-  Future<void> loginWithGoogle(
-    BuildContext context,
-    void Function(UserEntity user) onLogin,
-  ) async {
+  Future<void> login() async {
+    value = LoginErrorState(error: GenericAuthError(error: 'Errrroooo'));
+    return;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return await _loginWithGoogle();
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return await _loginWithApple();
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
     value = LoginLoadingState();
 
     final (user, error) = await _loginWithGoogleUsecase();
 
     if (error != null) {
       value = LoginErrorState(error: error);
-      showDialog(
-        context: context,
-        builder: (BuildContext ctx) => ErrorDialogComponent(
-          errorMessage: error.message ?? error.error,
-        ),
-      );
     }
 
     if (user != null) {
-      value = LoginSuccessState(user: user);
-      onLogin(user);
+      value = LoginSuccessState();
     }
   }
 
-  Future<void> loginWithApple(
-    BuildContext context,
-    void Function(UserEntity user) onLogin,
-  ) async {
+  Future<void> _loginWithApple() async {
     value = LoginLoadingState();
 
     final (user, error) = await _loginWithAppleUsecase();
@@ -50,21 +47,7 @@ class LoginStore extends ValueNotifier<LoginState> {
     }
 
     if (user != null) {
-      value = LoginSuccessState(user: user);
-      onLogin(user);
+      value = LoginSuccessState();
     }
-  }
-
-  void verifyAuthState(void Function(UserEntity user) onAuthenticated) {
-    FirebaseAuth.instance.authStateChanges().listen((User? fireUser) async {
-      if (fireUser != null) {
-        onAuthenticated(UserEntity(
-          id: fireUser.uid,
-          email: fireUser.email!,
-          name: fireUser.displayName!,
-          photo: fireUser.photoURL,
-        ));
-      }
-    });
   }
 }
