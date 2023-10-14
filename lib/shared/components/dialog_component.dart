@@ -33,21 +33,31 @@ class DialogComponent extends StatelessWidget {
         contentPadding: padding,
         children: [
           Text(content),
+          const SizedBox(height: 28),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: actions!,
+          ),
         ],
       );
     }
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width - 70,
-      child: SimpleDialog(
-        title: Text(title),
-        titlePadding: padding,
-        contentPadding: padding,
-        children: [
-          Text(content),
-          const SizedBox(height: 28),
-          ButtonComponent(onPressed: () => closeDialog(context), label: 'Ok')
-        ],
-      ),
+    return SimpleDialog(
+      title: Text(title),
+      titlePadding: padding,
+      contentPadding: padding,
+      children: [
+        Text(content),
+        const SizedBox(height: 28),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ButtonComponent(onPressed: () => closeDialog(context), label: 'Ok'),
+          ],
+        ),
+      ],
     );
   }
 }

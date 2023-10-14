@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/presenter/components/login_button.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
+import 'package:kikagada/modules/review/presenter/screens/feed_screen.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,15 +45,26 @@ class _LoginScreenState extends State<LoginScreen> {
           valueListenable: _store,
           builder: (context, state, child) {
             if (state is LoginErrorState) {
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                showAdaptiveDialog(
-                    context: context,
-                    builder: (ctx) {
-                      return DialogComponent(
-                        title: 'Erro ao realizar login',
-                        content: state.error.error,
-                      );
-                    });
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                return showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (ctx) {
+                    return DialogComponent(
+                      title: 'Erro ao realizar login',
+                      content: state.error.error,
+                    );
+                  },
+                );
+              });
+            }
+
+            if (state is LoginSuccessState) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                return await Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => const FeedScreen()),
+                  (route) => false,
+                );
               });
             }
             return child!;

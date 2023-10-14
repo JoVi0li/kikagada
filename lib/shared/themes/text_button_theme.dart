@@ -7,9 +7,10 @@ class CustomTextButtonTheme {
         backgroundColor: const Color(0xFFFEFDF9),
         side: const BorderSide(
           color: Color(0xFF020202),
-          width: 1.0,
+          width: 1.5,
           style: BorderStyle.solid,
         ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         minimumSize: const Size(100, 52),
       ),
     );

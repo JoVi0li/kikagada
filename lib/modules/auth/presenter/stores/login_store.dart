@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
@@ -12,8 +11,6 @@ class LoginStore extends ValueNotifier<LoginState> {
       : super(LoginInitialState());
 
   Future<void> login() async {
-    value = LoginErrorState(error: GenericAuthError(error: 'Errrroooo'));
-    return;
     if (defaultTargetPlatform == TargetPlatform.android) {
       return await _loginWithGoogle();
     }

@@ -30,12 +30,7 @@ class ButtonComponent extends StatelessWidget {
     return Container(
       width: 100,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(100),
-          bottomLeft: Radius.circular(100),
-          topRight: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         boxShadow: [
           BoxShadow(
             offset: const Offset(3.0, 2.5),
