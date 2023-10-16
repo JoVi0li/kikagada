@@ -25,6 +25,7 @@ import 'package:kikagada/modules/review/infra/repositories/review_repository.dar
 import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
+import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
 
 final class Inject {
   final GetIt _getIt = GetIt.I;
@@ -32,6 +33,7 @@ final class Inject {
   Inject._() {
     authModule();
     reviewModule();
+    shared();
   }
 
   void authModule() {
@@ -74,6 +76,12 @@ final class Inject {
     _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
     _getIt.registerLazySingleton<ICreateReviewStore>(
         () => CreateReviewStore(_getIt(), _getIt()));
+  }
+
+  void shared() {
+    _getIt.registerLazySingleton<NavigationBarController>(
+      () => NavigationBarController(),
+    );
   }
 
   factory Inject.initialize() {

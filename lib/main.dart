@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kikagada/firebase_options.dart';
 import 'package:kikagada/modules/auth/presenter/screens/login_screen.dart';
-import 'package:kikagada/modules/review/presenter/screens/home_screen.dart';
+import 'package:kikagada/shared/components/navigation_bar/navigation_bar_component.dart';
 import 'package:kikagada/shared/inject/inject.dart';
 import 'package:kikagada/shared/routes/app.routes.dart';
 import 'package:kikagada/shared/themes/app_theme.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           /// TODO: Implement hasError case
           /// Example: if(snapshot.hasError) return const ErrorScreen();
-          if (snapshot.hasData) return const HomeScreen();
+          if (snapshot.hasData) return const NavigationBarComponent();
           return const LoginScreen();
         },
       ),
