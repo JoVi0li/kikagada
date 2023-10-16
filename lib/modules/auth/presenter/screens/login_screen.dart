@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/presenter/components/login_button.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
-import 'package:kikagada/modules/review/presenter/screens/feed_screen.dart';
+import 'package:kikagada/modules/review/presenter/screens/home_screen.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 return await Navigator.pushAndRemoveUntil<void>(
                   context,
-                  MaterialPageRoute(builder: (ctx) => const FeedScreen()),
+                  MaterialPageRoute(builder: (ctx) => const HomeScreen()),
                   (route) => false,
                 );
               });
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               Text(
                 "O ponto de encontro para\nquem tem história no\nbanheiro.",
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleSmall,
                 textAlign: TextAlign.left,
               ),
               const Spacer(),

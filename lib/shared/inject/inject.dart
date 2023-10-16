@@ -23,7 +23,7 @@ import 'package:kikagada/modules/review/external/datasources/firebase_review_dat
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
-import 'package:kikagada/modules/review/presenter/stores/feed_store.dart';
+import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
 
 final class Inject {
@@ -71,7 +71,7 @@ final class Inject {
         () => UploadPhotosUsecase(repository: _getIt()));
     _getIt.registerLazySingleton<IReviewDetailsStore>(
         () => ReviewDetailsStore(_getIt(), _getIt(), _getIt()));
-    _getIt.registerLazySingleton<IFeedStore>(() => FeedStore(_getIt()));
+    _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
     _getIt.registerLazySingleton<ICreateReviewStore>(
         () => CreateReviewStore(_getIt(), _getIt()));
   }

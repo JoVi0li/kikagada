@@ -28,7 +28,6 @@ class ButtonComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         boxShadow: [
@@ -42,7 +41,7 @@ class ButtonComponent extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: Theme.of(context).textButtonTheme.style,
-        child: Text(label, style: Theme.of(context).textTheme.labelLarge),
+        child: Text(label, style: Theme.of(context).textTheme.labelMedium),
       ),
     );
   }

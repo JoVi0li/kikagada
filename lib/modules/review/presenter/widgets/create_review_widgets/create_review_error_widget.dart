@@ -14,7 +14,7 @@ class CreateReviewErrorWidget extends StatelessWidget {
         children: [
           const Icon(Icons.error, size: 36, color: Colors.white),
           const SizedBox(height: 12),
-          Text(error.error, style: Theme.of(context).textTheme.labelLarge),
+          Text(error.error, style: Theme.of(context).textTheme.labelMedium),
         ],
       ),
     );

@@ -38,7 +38,7 @@ class GalleryViewComponent extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             'Não foi possivel carregar a imagem',
-            style: Theme.of(context).textTheme.labelLarge,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ],
       ),
