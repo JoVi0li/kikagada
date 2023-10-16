@@ -3,9 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/states/review_details_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/error_review_details_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/loading_review_details_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/review_details_loading_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/success_review_details_widget.dart';
-import 'package:kikagada/shared/components/app_bar_component.dart';
 
 class ReviewDetailsScreen extends StatefulWidget {
   const ReviewDetailsScreen({super.key, required this.reviewId});
@@ -37,23 +36,25 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.sizeOf(context).width, 60),
-        child: const AppBarComponent(title: 'Review', hasBackButton: true),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Review', style: Theme.of(context).textTheme.titleMedium),
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,
           builder: (context, state, child) {
             switch (state) {
-              case LoadingReviewDetailsState():
-                return const LoadingReviewDetailsWidget();
-              case SuccessReviewDetailsState():
+              case ReviewDetailsLoadingState():
+                return const ReviewDetailsLoadingWidget();
+              case ReviewDetailsSuccessState():
                 return SuccessReviewDetailsWidget(review: state.review);
-              case ErrorReviewDetailsState():
+              case ReviewDetailsErrorState():
                 return ErrorReviewDetailsWidget(error: state.error);
               default:
-                return const LoadingReviewDetailsWidget();
+                return const ReviewDetailsLoadingWidget();
             }
           },
         ),

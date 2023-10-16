@@ -17,7 +17,7 @@ class ReviewDetailsStore extends ValueNotifier<ReviewDetailsState>
     this._getReviewByIdUsecase,
     this._updateReviewUsecase,
     this._getPhotosDownloadURL,
-  ) : super(LoadingReviewDetailsState());
+  ) : super(ReviewDetailsLoadingState());
 
   final IGetReviewByIdUsecase _getReviewByIdUsecase;
   final IUpdateReviewUsecase _updateReviewUsecase;
@@ -25,38 +25,38 @@ class ReviewDetailsStore extends ValueNotifier<ReviewDetailsState>
 
   @override
   Future<void> getById(String id) async {
-    value = LoadingReviewDetailsState();
+    value = ReviewDetailsLoadingState();
 
     final (review, reviewError) = await _getReviewByIdUsecase(id);
 
     if (reviewError != null) {
-      value = ErrorReviewDetailsState(error: reviewError);
+      value = ReviewDetailsErrorState(error: reviewError);
       return;
     }
 
     final (urls, urlsError) = await _getPhotosDownloadURL(review!.photos);
 
     if (urlsError != null) {
-      value = ErrorReviewDetailsState(error: urlsError);
+      value = ReviewDetailsErrorState(error: urlsError);
       return;
     }
 
-    value = SuccessReviewDetailsState(review: review.copyWith(photos: urls));
+    value = ReviewDetailsSuccessState(review: review.copyWith(photos: urls));
   }
 
   @override
   Future<void> update(ReviewEntity review) async {
-    value = LoadingReviewDetailsState();
+    value = ReviewDetailsLoadingState();
 
     final (success, failure) = await _updateReviewUsecase(review);
 
     if (failure != null) {
-      value = ErrorReviewDetailsState(error: failure);
+      value = ReviewDetailsErrorState(error: failure);
       return;
     }
 
     if (success != null) {
-      value = SuccessReviewDetailsState(review: success);
+      value = ReviewDetailsSuccessState(review: success);
       return;
     }
   }

@@ -3,14 +3,14 @@ import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 
 abstract class ReviewDetailsState {}
 
-class LoadingReviewDetailsState extends ReviewDetailsState {}
+class ReviewDetailsLoadingState extends ReviewDetailsState {}
 
-class SuccessReviewDetailsState extends ReviewDetailsState {
-  SuccessReviewDetailsState({required this.review});
+class ReviewDetailsSuccessState extends ReviewDetailsState {
+  ReviewDetailsSuccessState({required this.review});
   final ReviewEntity review;
 }
 
-class ErrorReviewDetailsState extends ReviewDetailsState {
-  ErrorReviewDetailsState({required this.error});
+class ReviewDetailsErrorState extends ReviewDetailsState {
+  ReviewDetailsErrorState({required this.error});
   final ReviewError error;
 }
