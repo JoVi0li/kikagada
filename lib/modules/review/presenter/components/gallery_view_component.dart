@@ -55,18 +55,27 @@ class GalleryViewComponent extends StatelessWidget {
       itemCount: photosURL.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext ctx, int index) {
-        return Image.network(
-          photosURL[index],
-          fit: BoxFit.fill,
-          filterQuality: FilterQuality.low,
-          width: photosURL.length > 1
-              ? getSize(ctx).width * 0.97
-              : getSize(ctx).width,
-          height: getSize(ctx).height * 0.25,
-          cacheWidth: getSize(ctx).width.toInt(),
-          cacheHeight: (getSize(ctx).height * 0.25).toInt(),
-          frameBuilder: frameBuilder,
-          errorBuilder: errorBuilder,
+        return Container(
+          width: getSize(ctx).width,
+          height: getSize(ctx).height,
+          margin: photosURL.length == 1
+              ? null
+              : const EdgeInsets.only(right: 24, left: 24),
+          padding: photosURL.length == 1
+              ? const EdgeInsets.only(right: 24, left: 24)
+              : null,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: Image.network(
+              photosURL[index],
+              fit: BoxFit.fill,
+              filterQuality: FilterQuality.low,
+              cacheWidth: getSize(ctx).width.toInt(),
+              cacheHeight: (getSize(ctx).height * 0.25).toInt(),
+              frameBuilder: frameBuilder,
+              errorBuilder: errorBuilder,
+            ),
+          ),
         );
       },
     );

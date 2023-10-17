@@ -11,22 +11,7 @@ class SuccessReviewDetailsWidget extends StatefulWidget {
       _SuccessReviewDetailsWidgetState();
 }
 
-class _SuccessReviewDetailsWidgetState
-    extends State<SuccessReviewDetailsWidget> {
-  late bool isFullTextVisible;
-
-  @override
-  void initState() {
-    super.initState();
-    isFullTextVisible = false;
-  }
-
-  void changeTextVisibility() {
-    setState(() {
-      isFullTextVisible = !isFullTextVisible;
-    });
-  }
-
+class _SuccessReviewDetailsWidgetState extends State<SuccessReviewDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -38,33 +23,39 @@ class _SuccessReviewDetailsWidgetState
             height: MediaQuery.sizeOf(context).height * 0.35,
             child: GalleryViewComponent(photosURL: widget.review.photos),
           ),
-          const SizedBox(height: 36),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              widget.review.title,
-              style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.left,
-            ),
-          ),
           const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: GestureDetector(
-              onTap: changeTextVisibility,
-              child: Text(
-                widget.review.body,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.white),
-                textAlign: TextAlign.left,
-                maxLines: isFullTextVisible ? null : 5,
-                overflow: isFullTextVisible ? null : TextOverflow.ellipsis,
-              ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF020202), width: 1),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            margin: const EdgeInsets.only(left: 24, right: 24),
+            width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height * 0.5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    widget.review.title,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        widget.review.body,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          const SizedBox(height: 60),
         ],
       ),
     );
