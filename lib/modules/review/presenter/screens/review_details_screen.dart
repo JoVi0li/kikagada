@@ -45,8 +45,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,
-          builder: (context, state, child) {
-            switch (state) {
+          builder: (context, state, child) {            switch (state) {
               case ReviewDetailsLoadingState():
                 return const ReviewDetailsLoadingWidget();
               case ReviewDetailsSuccessState():

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
-import 'package:kikagada/modules/review/presenter/screens/home_screen.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/review_details_loading_widget.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
+import 'package:kikagada/shared/components/navigation_bar/navigation_bar_component.dart';
 
 class ErrorReviewDetailsWidget extends StatelessWidget {
   const ErrorReviewDetailsWidget({super.key, required this.error});
   final ReviewError error;
 
   void onPressed(BuildContext context) async {
+    Navigator.pop(context);
     return await Navigator.pushAndRemoveUntil<void>(
       context,
-      MaterialPageRoute(builder: (ctx) => const HomeScreen()),
+      MaterialPageRoute(builder: (ctx) => const NavigationBarComponent()),
       (route) => false,
     );
   }
