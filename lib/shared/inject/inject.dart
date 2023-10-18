@@ -15,6 +15,7 @@ import 'package:kikagada/modules/auth/external/datasource/firebase_auth_datasour
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
 import 'package:kikagada/modules/auth/infra/repositories/auth_repository_imp.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
+import 'package:kikagada/modules/auth/presenter/stores/profile_store.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/delete_review_usecase/delete_review_usecase.dart';
@@ -57,6 +58,8 @@ final class Inject {
         () => GetUserUsecase(repository: _getIt()));
     _getIt.registerLazySingleton<LoginStore>(
         () => LoginStore(_getIt(), _getIt()));
+    _getIt.registerLazySingleton<IProfileStore>(
+        () => ProfileStore(_getIt(), _getIt()));
   }
 
   void reviewModule() {
