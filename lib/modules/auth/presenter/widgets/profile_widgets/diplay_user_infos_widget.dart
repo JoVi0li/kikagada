@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/shared/components/button_component.dart';
 
 class DisplayUserInfosWidget extends StatelessWidget {
   const DisplayUserInfosWidget(

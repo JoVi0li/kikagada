@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kikagada/shared/components/button_component.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileLoadingWidget extends StatelessWidget {
