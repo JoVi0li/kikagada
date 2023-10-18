@@ -10,7 +10,7 @@ class HomeErrorWidget extends StatelessWidget {
   final ReviewError error;
   final void Function() tryAgain;
 
-  void onPressed(BuildContext context)  {
+  void onPressed(BuildContext context) {
     Navigator.pop(context);
     tryAgain();
   }
@@ -19,6 +19,7 @@ class HomeErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       return showAdaptiveDialog<void>(
+        barrierDismissible: false,
         context: context,
         builder: (ctx) {
           return DialogComponent(

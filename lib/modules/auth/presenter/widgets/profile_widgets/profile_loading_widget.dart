@@ -49,16 +49,6 @@ class ProfileLoadingWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const Spacer(),
-            Shimmer.fromColors(
-              baseColor: Theme.of(context).colorScheme.background,
-              highlightColor: Theme.of(context).colorScheme.primary,
-              child: ButtonComponent(
-                onPressed: () {},
-                label: 'Excluir conta',
-                type: ButtonComponentType.delete,
-              ),
-            ),
           ],
         ),
       ),

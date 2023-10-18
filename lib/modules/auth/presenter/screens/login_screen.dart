@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is LoginErrorState) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 return showAdaptiveDialog<void>(
+                  barrierDismissible: false,
                   context: context,
                   builder: (ctx) {
                     return DialogComponent(

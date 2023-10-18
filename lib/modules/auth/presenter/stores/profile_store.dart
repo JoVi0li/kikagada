@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/modules/auth/domain/usecases/delete_account_usecase/delete_account_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/get_user_usecase/get_user_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/profile_state.dart';
@@ -6,6 +7,8 @@ import 'package:kikagada/modules/auth/presenter/states/profile_state.dart';
 abstract interface class IProfileStore extends ValueListenable<ProfileState> {
   Future<void> getUser();
   Future<void> deleteAccount();
+  void initDeleteAccountFlow(UserEntity user);
+  void cancelDeleteAccountFlow(UserEntity user);
 }
 
 class ProfileStore extends ValueNotifier<ProfileState>
@@ -43,5 +46,17 @@ class ProfileStore extends ValueNotifier<ProfileState>
 
     if (user != null) {
       value = ProfileRetrievedAccountState(user: user);
-    }  }
+      return;
+    }
+  }
+
+  @override
+  void initDeleteAccountFlow(UserEntity user) {
+    value = ProfileInitDeleteAccountFlowState(user: user);
+  }
+
+  @override
+  void cancelDeleteAccountFlow(UserEntity user) {
+    value = ProfileRetrievedAccountState(user: user);
+  }
 }

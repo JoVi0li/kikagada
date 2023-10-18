@@ -4,9 +4,14 @@ import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 
 class DisplayUserInfosWidget extends StatelessWidget {
-  const DisplayUserInfosWidget(this.user, {super.key});
+  const DisplayUserInfosWidget(
+    this.user, {
+    super.key,
+    required this.onDeleteAccount,
+  });
 
   final UserEntity user;
+  final void Function(UserEntity) onDeleteAccount;
 
   Widget frameBuilder(
     BuildContext context,
@@ -91,12 +96,6 @@ class DisplayUserInfosWidget extends StatelessWidget {
               user.email,
               style: Theme.of(context).textTheme.labelMedium,
               textAlign: TextAlign.center,
-            ),
-            const Spacer(),
-            ButtonComponent(
-              onPressed: () {},
-              label: 'Excluir conta',
-              type: ButtonComponentType.delete,
             ),
           ],
         ),

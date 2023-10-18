@@ -15,6 +15,11 @@ final class ProfileDeletedAccountState extends ProfileState {
   final UserEntity deletedAccount;
 }
 
+final class ProfileInitDeleteAccountFlowState extends ProfileState {
+  ProfileInitDeleteAccountFlowState({required this.user});
+  final UserEntity user;
+}
+
 final class ProfileErrorState extends ProfileState {
   ProfileErrorState({required this.error});
   final AuthError error;

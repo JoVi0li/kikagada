@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/presenter/states/profile_state.dart';
 import 'package:kikagada/modules/auth/presenter/stores/profile_store.dart';
+import 'package:kikagada/modules/auth/presenter/widgets/profile_widgets/delete_account_widget.dart';
 import 'package:kikagada/modules/auth/presenter/widgets/profile_widgets/diplay_user_infos_widget.dart';
 import 'package:kikagada/modules/auth/presenter/widgets/profile_widgets/profile_loading_widget.dart';
 
@@ -47,9 +48,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             case ProfileLoadingState():
               return const ProfileLoadingWidget();
             case ProfileRetrievedAccountState():
-              return DisplayUserInfosWidget(state.user);
+              return DisplayUserInfosWidget(
+                state.user,
+                onDeleteAccount: _store.initDeleteAccountFlow,
+              );
             case ProfileDeletedAccountState():
               return const ProfileLoadingWidget();
+            case ProfileInitDeleteAccountFlowState():
+              return DeleteAccountWidget(
+                state.user,
+                onCancel: _store.cancelDeleteAccountFlow,
+                onConfirm: _store.deleteAccount,
+              );
             default:
               return const ProfileLoadingWidget();
           }
