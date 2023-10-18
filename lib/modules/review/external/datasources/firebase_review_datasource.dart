@@ -116,4 +116,38 @@ class FirebaseReviewDatasource implements IReviewDatasource {
 
     return photosDownloadURL;
   }
+
+  @override
+  Future<List<ReviewEntity>> getMyReviews(
+      ReviewEntity? starterAfter, int? limit) {
+    if (starterAfter != null) {
+      return _firestore
+          .collection('reviews')
+          .orderBy('updatedAt', descending: true)
+          .where('authorId', isEqualTo: _auth.currentUser!.uid)
+          .startAfter([starterAfter])
+          .limit(limit ?? 25)
+          .get()
+          .then((querySnap) => querySnap.docs
+              .map(
+                (queryDocSnap) => ReviewEntityExtension.fromMap(
+                  queryDocSnap.data(),
+                ),
+              )
+              .toList());
+    }
+    return _firestore
+        .collection('reviews')
+        .orderBy('updatedAt', descending: true)
+        .where('authorId', isEqualTo: _auth.currentUser!.uid)
+        .limit(limit ?? 25)
+        .get()
+        .then((querySnap) => querySnap.docs
+            .map(
+              (queryDocSnap) => ReviewEntityExtension.fromMap(
+                queryDocSnap.data(),
+              ),
+            )
+            .toList());
+  }
 }

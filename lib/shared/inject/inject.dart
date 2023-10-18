@@ -14,6 +14,7 @@ import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/delete_review_usecase/delete_review_usecase.dart';
+import 'package:kikagada/modules/review/domain/usecases/get_my_reviews_usecase/get_my_reviews_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_reviews_usecase/get_reviews_usecase.dart';
@@ -24,6 +25,7 @@ import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
+import 'package:kikagada/modules/review/presenter/stores/my_reviews_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
 import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
 
@@ -71,11 +73,15 @@ final class Inject {
         () => GetPhotosDownloadURL(repository: _getIt()));
     _getIt.registerLazySingleton<IUploadPhotosUsecase>(
         () => UploadPhotosUsecase(repository: _getIt()));
+    _getIt.registerLazySingleton<IGetMyReviewsUsecase>(
+        () => GetMyReviewsUsecase(_getIt()));
     _getIt.registerLazySingleton<IReviewDetailsStore>(
         () => ReviewDetailsStore(_getIt(), _getIt(), _getIt()));
     _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
     _getIt.registerLazySingleton<ICreateReviewStore>(
         () => CreateReviewStore(_getIt(), _getIt()));
+    _getIt
+        .registerLazySingleton<IMyReviewsStore>(() => MyReviewsStore(_getIt()));
   }
 
   void shared() {

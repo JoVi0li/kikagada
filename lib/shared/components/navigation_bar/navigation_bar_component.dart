@@ -4,11 +4,13 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/screens/create_review_screen.dart';
 import 'package:kikagada/modules/review/presenter/screens/home_screen.dart';
 import 'package:kikagada/modules/review/presenter/screens/profile_screen.dart';
-import 'package:kikagada/modules/review/presenter/screens/reviews_screen.dart';
+import 'package:kikagada/modules/review/presenter/screens/my_reviews_screen.dart';
 import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
 
 class NavigationBarComponent extends StatefulWidget {
-  const NavigationBarComponent({super.key, required});
+  const NavigationBarComponent({super.key,  this.screenIndex});
+
+  final int? screenIndex;
 
   @override
   State<NavigationBarComponent> createState() => _NavigationBarComponentState();
@@ -18,11 +20,18 @@ class _NavigationBarComponentState extends State<NavigationBarComponent> {
   late final GetIt _getIt;
   late final NavigationBarController _controller;
 
+  void setInitialIndex() {
+    if (widget.screenIndex != null) {
+      _controller.value = widget.screenIndex!;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _getIt = GetIt.I;
     _controller = _getIt<NavigationBarController>();
+    setInitialIndex();
   }
 
   @override
@@ -39,7 +48,7 @@ class _NavigationBarComponentState extends State<NavigationBarComponent> {
         return Scaffold(
           body: const [
             HomeScreen(),
-            ReviewsScreen(),
+            MyReviewsScreen(),
             CreateReviewScreen(),
             ProfileScreen(),
           ][state],
