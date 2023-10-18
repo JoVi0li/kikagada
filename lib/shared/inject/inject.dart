@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
+import 'package:kikagada/modules/auth/domain/usecases/delete_account_usecase/delete_account_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/delete_account_usecase/delete_account_usecase_imp.dart';
+import 'package:kikagada/modules/auth/domain/usecases/get_user_usecase/get_user_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/get_user_usecase/get_user_usecase_imp.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase_imp.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
@@ -47,6 +51,10 @@ final class Inject {
         () => LoginWithGoogleUsecaseImp(repository: _getIt()));
     _getIt.registerLazySingleton<ILoginWithAppleUsecase>(
         () => LoginWithAppleUsecaseImp(repository: _getIt()));
+    _getIt.registerLazySingleton<IDeleteAccountUsecase>(
+        () => DeleteAccountUsecase(repository: _getIt()));
+    _getIt.registerLazySingleton<IGetUserUsecase>(
+        () => GetUserUsecase(repository: _getIt()));
     _getIt.registerLazySingleton<LoginStore>(
         () => LoginStore(_getIt(), _getIt()));
   }

@@ -57,4 +57,52 @@ final class AuthRepositoryImp implements IAuthRepository {
       );
     }
   }
+
+  @override
+  Future<(UserEntity?, AuthError?)> deleteAccount() async {
+    try {
+      final result = await _datasource.deleteAccount();
+      return (result, null);
+    } on FirebaseAuthException catch (e) {
+      return (
+        null,
+        GenericFirebaseAuthError(
+          error: e.code,
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return (
+        null,
+        GenericAuthError(
+          error: e.toString(),
+          message: null,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<(UserEntity?, AuthError?)> getUser() async {
+    try {
+      final result = await _datasource.getUser();
+      return (result, null);
+    } on FirebaseAuthException catch (e) {
+      return (
+        null,
+        GenericFirebaseAuthError(
+          error: e.code,
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return (
+        null,
+        GenericAuthError(
+          error: e.toString(),
+          message: null,
+        ),
+      );
+    }
+  }
 }

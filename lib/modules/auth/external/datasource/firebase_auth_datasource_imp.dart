@@ -34,4 +34,16 @@ class FirebaseAuthDatasourceImp implements IAuthDatasource {
 
     return user;
   }
+
+  @override
+  Future<UserEntity> deleteAccount() async {
+    final user = UserEntityExtension.fromFirebase(_auth.currentUser!);
+    await _auth.currentUser!.delete();
+    return user;
+  }
+
+  @override
+  Future<UserEntity> getUser() async {
+    return UserEntityExtension.fromFirebase(_auth.currentUser!);
+  }
 }
