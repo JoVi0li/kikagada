@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/presenter/screens/profile_screen.dart';
-import 'package:kikagada/modules/review/presenter/screens/create_review_screen.dart';
 import 'package:kikagada/modules/review/presenter/screens/home_screen.dart';
 import 'package:kikagada/modules/review/presenter/screens/my_reviews_screen.dart';
 import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
@@ -49,7 +48,7 @@ class _NavigationBarComponentState extends State<NavigationBarComponent> {
           body: const [
             HomeScreen(),
             MyReviewsScreen(),
-            CreateReviewScreen(),
+            Placeholder(),
             ProfileScreen(),
           ][state],
           bottomNavigationBar: NavigationBar(

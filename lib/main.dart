@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kikagada',
       theme: AppTheme.theme(),
-      routes: AppRoutes.routes(context),
       onGenerateRoute: AppRoutes.onGenerateRoute,
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
