@@ -28,6 +28,7 @@ import 'package:kikagada/modules/review/domain/usecases/upload_photos_usecase/up
 import 'package:kikagada/modules/review/external/datasources/firebase_review_datasource.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
+import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/my_reviews_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
@@ -90,6 +91,8 @@ final class Inject {
     _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
     _getIt
         .registerLazySingleton<IMyReviewsStore>(() => MyReviewsStore(_getIt()));
+    _getIt
+        .registerLazySingleton<CreateReviewStore>(() => CreateReviewStore(_getIt(), _getIt()));
   }
 
   void shared() {

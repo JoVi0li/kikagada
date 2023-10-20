@@ -16,3 +16,5 @@ final class CreateReviewErrorState extends CreateReviewState {
   CreateReviewErrorState({required this.error});
   final ReviewError error;
 }
+
+final class CreateReviewHasNoPhotosState extends CreateReviewState {}

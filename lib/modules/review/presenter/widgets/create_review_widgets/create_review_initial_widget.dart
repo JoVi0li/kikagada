@@ -1,91 +1,162 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:kikagada/modules/review/presenter/components/selected_files_preview_component.dart';
-import 'package:kikagada/modules/review/presenter/controllers/create_review_controller.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/modules/review/presenter/components/gallery_view_component.dart';
+import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
+import 'package:kikagada/shared/components/button_component.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreateReviewInitialWidget extends StatefulWidget {
-  const CreateReviewInitialWidget(this._controller,
-      {super.key, required this.onPressed});
-
-  final ICreateReviewController _controller;
-
-  final void Function() onPressed;
-
+  const CreateReviewInitialWidget({
+    super.key,
+  });
   @override
   State<CreateReviewInitialWidget> createState() =>
       _CreateReviewInitialWidgetState();
 }
 
 class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
-  Future<void> pickImages(BuildContext context) async {
-    final (_, error) = await widget._controller.pickPhotos(context);
+  late final GetIt _getIt;
+  late final FilePicker picker;
+  late final CreateReviewStore _store;
 
-    setState(() {});
+  Future<void> pickImages() async {
+    try {
+      await handleRequestPermissions();
+      
+      final result =
+          await picker.pickFiles(type: FileType.image, allowMultiple: true);
 
-    if (error != null) {
-      /// TODO: implement error dialog 
+      if (result == null || result.count == 0) return;
+
+      if (result.count > 3) {
+        throw GenericReviewError(
+          error: 'Selecione no máximo 3 fotos',
+          message: 'Tente novamente e respeito o limite',
+        );
+      }
+
+      final paths = result.files.map((file) => file.path!).toList();
+
+      _store.getImagesPath(paths);
+      setState(() {});
+    } on ReviewError catch (e) {
+      _store.onErrorGettingImage(e);
+    } catch (e) {
+      _store.onErrorGettingImage(
+        GenericReviewError(
+          error: 'Não foi possível selecionar as fotos. Tente novamente',
+          message: null,
+        ),
+      );
     }
+  }
+
+  Future<void> handleRequestPermissions() async {
+    final status = await Permission.accessMediaLocation.status;
+
+    if (status == PermissionStatus.denied) {
+      await Permission.accessMediaLocation.request();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getIt = GetIt.I;
+    picker = FilePicker.platform;
+    _store = _getIt<CreateReviewStore>();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: widget._controller.formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              maxLines: 1,
-              maxLength: 50,
-              controller: widget._controller.titleController,
-              validator: (value) =>
-                  widget._controller.validator('título', value),
-              style: Theme.of(context).textTheme.bodyLarge,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Título',
+      child: Center(
+        child: Form(
+          key: _store.formKey,
+          child: Column(
+            children: [
+              Ink(
+                height: MediaQuery.sizeOf(context).height * 0.30,
+                width: MediaQuery.sizeOf(context).width - 48,
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: InkWell(
+                  onTap: pickImages,
+                  child: _store.photosPath.isEmpty
+                      ? SvgPicture.asset(
+                          'lib/shared/assets/icons/fileupload.svg',
+                          fit: BoxFit.none,
+                          height: 24,
+                          width: 24,
+                        )
+                      : GalleryViewComponent(
+                          isFromAssets: true,
+                          photosURL: _store.photosPath,
+                        ),
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-            TextFormField(
-              maxLines: 10,
-              maxLength: 1200,
-              controller: widget._controller.bodyController,
-              validator: (value) =>
-                  widget._controller.validator('relato', value),
-              style: Theme.of(context).textTheme.bodyLarge,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Relato',
-              ),
-            ),
-            const SizedBox(height: 32),
-            TextButton(
-              onPressed: () async => await pickImages(context),
-              child: Row(
-                children: [
-                  const Icon(Icons.upload, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Subir fotos',
-                    style: Theme.of(context).textTheme.bodyLarge,
+              const SizedBox(height: 24),
+              Container(
+                width: MediaQuery.sizeOf(context).width - 48,
+                height: MediaQuery.sizeOf(context).height * 0.40,
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        style: Theme.of(context).textTheme.titleSmall,
+                        controller: _store.titleController,
+                        validator: _store.titleValidator,
+                        maxLines: 1,
+                        maxLength: 100,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Adicione um título...',
+                        ),
+                      ),
+                      TextFormField(
+                        style: Theme.of(context).textTheme.labelMedium,
+                        controller: _store.bodyController,
+                        validator: _store.bodyValidator,
+                        maxLines: null,
+                        maxLength: 1000,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Escreva aqui sua review...',
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-            SelectedFilesPreviewComponent(files: widget._controller.photos),
-            const SizedBox(height: 32),
-            OutlinedButton(
-              onPressed: () async {
-                if (!await (widget._controller.photosValidator(context))) {
-                  return;
-                }
-
-                widget.onPressed();
-              },
-              child: const Text('Criar review'),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 48,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ButtonComponent(
+                        onPressed: _store.createReview,
+                        label: 'Criar',
+                        type: ButtonComponentType.create,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class GalleryViewComponent extends StatelessWidget {
-  GalleryViewComponent({super.key, required this.photosURL})
-      : assert(photosURL.isNotEmpty, 'photosURL can not be empty');
+  GalleryViewComponent({
+    super.key,
+    required this.photosURL,
+    this.isFromAssets = false,
+  }) : assert(photosURL.isNotEmpty, 'photosURL can not be empty');
 
   final List<String> photosURL;
+  final bool isFromAssets;
 
   Widget frameBuilder(
     BuildContext context,
@@ -66,7 +72,15 @@ class GalleryViewComponent extends StatelessWidget {
               : null,
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: Image.network(
+            child: isFromAssets  ? Image.file(
+              File(photosURL[index]),
+              fit: BoxFit.fill,
+              filterQuality: FilterQuality.low,
+              cacheWidth: getSize(ctx).width.toInt(),
+              cacheHeight: (getSize(ctx).height * 0.25).toInt(),
+              frameBuilder: frameBuilder,
+              errorBuilder: errorBuilder,
+            ) : Image.network(
               photosURL[index],
               fit: BoxFit.fill,
               filterQuality: FilterQuality.low,
