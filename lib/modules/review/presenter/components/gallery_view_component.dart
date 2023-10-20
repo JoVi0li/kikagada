@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class GalleryViewComponent extends StatelessWidget {
-  GalleryViewComponent({super.key, required this.photosURL})
-      : assert(photosURL.isNotEmpty, 'photosURL can not be empty');
+  GalleryViewComponent({
+    super.key,
+    required this.photosURL,
+    this.isFromAssets = false,
+  }) : assert(photosURL.isNotEmpty, 'photosURL can not be empty');
 
   final List<String> photosURL;
+  final bool isFromAssets;
 
   Widget frameBuilder(
     BuildContext context,
@@ -38,7 +44,7 @@ class GalleryViewComponent extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             'Não foi possivel carregar a imagem',
-            style: Theme.of(context).textTheme.labelLarge,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ],
       ),
@@ -55,18 +61,35 @@ class GalleryViewComponent extends StatelessWidget {
       itemCount: photosURL.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext ctx, int index) {
-        return Image.network(
-          photosURL[index],
-          fit: BoxFit.fill,
-          filterQuality: FilterQuality.low,
-          width: photosURL.length > 1
-              ? getSize(ctx).width * 0.97
-              : getSize(ctx).width,
-          height: getSize(ctx).height * 0.25,
-          cacheWidth: getSize(ctx).width.toInt(),
-          cacheHeight: (getSize(ctx).height * 0.25).toInt(),
-          frameBuilder: frameBuilder,
-          errorBuilder: errorBuilder,
+        return Container(
+          width: getSize(ctx).width,
+          height: getSize(ctx).height,
+          margin: photosURL.length == 1
+              ? null
+              : const EdgeInsets.only(right: 24, left: 24),
+          padding: photosURL.length == 1
+              ? const EdgeInsets.only(right: 24, left: 24)
+              : null,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: isFromAssets  ? Image.file(
+              File(photosURL[index]),
+              fit: BoxFit.fill,
+              filterQuality: FilterQuality.low,
+              cacheWidth: getSize(ctx).width.toInt(),
+              cacheHeight: (getSize(ctx).height * 0.25).toInt(),
+              frameBuilder: frameBuilder,
+              errorBuilder: errorBuilder,
+            ) : Image.network(
+              photosURL[index],
+              fit: BoxFit.fill,
+              filterQuality: FilterQuality.low,
+              cacheWidth: getSize(ctx).width.toInt(),
+              cacheHeight: (getSize(ctx).height * 0.25).toInt(),
+              frameBuilder: frameBuilder,
+              errorBuilder: errorBuilder,
+            ),
+          ),
         );
       },
     );

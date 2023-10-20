@@ -108,4 +108,21 @@ class ReviewRepository implements IReviewRepository {
       return (null, GenericReviewError(error: e.toString(), message: null));
     }
   }
+
+  @override
+  Future<(List<ReviewEntity>?, ReviewError?)> getMyReviews(
+    ReviewEntity? starterAfter,
+    int? limit,
+  ) async {
+    try {
+      return (await _datasource.getMyReviews(starterAfter, limit), null);
+    } on FirebaseException catch (e) {
+      return (
+        null,
+        GenericFirebaseReviewError(error: e.code, message: e.message)
+      );
+    } catch (e) {
+      return (null, GenericReviewError(error: e.toString(), message: null));
+    }
+  }
 }

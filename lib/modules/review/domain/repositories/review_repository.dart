@@ -20,4 +20,8 @@ abstract interface class IReviewRepository {
   Future<(List<String>? success, ReviewError? error)> getPhotosDownloadURL(
     List<String> photosPath,
   );
+  Future<(List<ReviewEntity>? success, ReviewError? failure)> getMyReviews(
+    ReviewEntity? starterAfter,
+    int? limit,
+  );
 }

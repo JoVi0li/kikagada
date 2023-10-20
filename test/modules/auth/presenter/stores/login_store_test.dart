@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
@@ -13,14 +12,12 @@ class LoginWithAppleUsecaseMock extends Mock
 class LoginWithGoogleUsecaseMock extends Mock
     implements ILoginWithGoogleUsecase {}
 
-class BuildContextMock extends Mock implements BuildContext {}
-
+/// TODO: Refactor tests
 void main() {
   late final LoginStore store;
   late final ILoginWithAppleUsecase loginWithAppleUsecase;
   late final ILoginWithGoogleUsecase loginWithGoogleUsecase;
   late final UserEntity entity;
-  late final BuildContext context;
 
   setUpAll(() {
     loginWithAppleUsecase = LoginWithAppleUsecaseMock();
@@ -32,7 +29,6 @@ void main() {
       photo: null,
     );
     store = LoginStore(loginWithGoogleUsecase, loginWithAppleUsecase);
-    context = BuildContextMock();
   });
 
   group('login store tests', () {
@@ -46,7 +42,7 @@ void main() {
         (_) => Future.value((entity, null)),
       );
 
-      final loginWithApple = store.loginWithApple(context, (user) {});
+      final loginWithApple = store.login();
 
       expect(store.value, isA<LoginLoadingState>());
 
@@ -59,7 +55,7 @@ void main() {
         (_) => Future.value((entity, null)),
       );
 
-      final loginWithGoogle = store.loginWithGoogle(context, (user) {});
+      final loginWithGoogle = store.login();
 
       expect(store.value, isA<LoginLoadingState>());
 
@@ -72,7 +68,7 @@ void main() {
         (_) => Future.value((entity, null)),
       );
 
-      await store.loginWithApple(context, (user) {});
+      await store.login();
 
       expect(store.value, isA<LoginSuccessState>());
     });
@@ -83,7 +79,7 @@ void main() {
         (_) => Future.value((entity, null)),
       );
 
-      await store.loginWithApple(context, (user) {});
+      await store.login();
 
       expect(store.value, isA<LoginSuccessState>());
     });

@@ -1,66 +1,110 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/upload_photos_usecase/upload_photos_usecase.dart';
 import 'package:kikagada/modules/review/presenter/states/create_review_state.dart';
-import 'package:kikagada/shared/routes/review_routes.dart';
 
-abstract interface class ICreateReviewStore
-    extends ValueListenable<CreateReviewState> {
-  Future<void> createReview(ReviewEntity review, BuildContext context);
-}
+final class CreateReviewStore extends ValueNotifier<CreateReviewState> {
+  CreateReviewStore(this.createReviewUsecase, this.uploadPhotosUsecase)
+      : super(CreateReviewInitialState()) {
+    initStore();
+  }
 
-final class CreateReviewStore extends ValueNotifier<CreateReviewState>
-    implements ICreateReviewStore {
-  CreateReviewStore(this._createReviewUsecase, this._uploadPhotosUsecase)
-      : super(CreateReviewInitialState());
+  late final GlobalKey<FormState> formKey;
+  late final TextEditingController titleController;
+  late final TextEditingController bodyController;
+  late List<String> photosPath;
 
-  final ICreateReviewUsecase _createReviewUsecase;
-  final IUploadPhotosUsecase _uploadPhotosUsecase;
+  final ICreateReviewUsecase createReviewUsecase;
+  final IUploadPhotosUsecase uploadPhotosUsecase;
 
-  @override
-  Future<void> createReview(ReviewEntity review, BuildContext context) async {
-    value = CreateReviewLoadingState();
+  void initStore() {
+    formKey = GlobalKey<FormState>();
+    titleController = TextEditingController();
+    bodyController = TextEditingController();
+    photosPath = [];
+  }
 
-    final (photos, uploadError) = await _uploadPhotosUsecase(review.photos);
+  void disposeStore() {
+    titleController.dispose();
+    bodyController.dispose();
+  }
 
-    if (uploadError != null) {
-      value = CreateReviewErrorState(error: uploadError);
+  void resetValues() {
+    titleController.text = '';
+    bodyController.text = '';
+    photosPath = [];
+  }
+
+  Future<void> createReview() async {
+    final hasPhoto = photosValidator();
+
+    if (!hasPhoto) {
+      value = CreateReviewHasNoPhotosState();
       return;
     }
 
-    if (photos == null || photos.isEmpty) {
-      value = CreateReviewErrorState(
-        error: GenericReviewError(
-          error: 'Não foi possível realizar o upload das fotos',
-          message: null,
-        ),
-      );
+    if (!(formKey.currentState!.validate())) return;
+
+    value = CreateReviewLoadingState();
+
+    final (photos, uploadFailure) = await uploadPhotosUsecase(photosPath);
+
+    if (uploadFailure != null) {
+      value = CreateReviewErrorState(error: uploadFailure);
+      return;
     }
 
-    final (success, error) =
-        await _createReviewUsecase(review.copyWith(photos: photos));
+    final currentDateTime = DateTime.now();
 
-    if (error != null) {
-      value = CreateReviewErrorState(error: error);
+    final review = ReviewEntity(
+      id: '',
+      authorId: '',
+      createdAt: currentDateTime,
+      updatedAt: currentDateTime,
+      title: titleController.text,
+      body: bodyController.text,
+      photos: photos!,
+    );
+
+    final (success, failure) = await createReviewUsecase(review);
+
+    if (failure != null) {
+      value = CreateReviewErrorState(error: failure);
       return;
     }
 
     if (success != null) {
-      await navigateToFeed(context);
+      value = CreateReviewSuccessState(review: success);
       return;
     }
-
-    value = CreateReviewInitialState();
   }
 
-  Future<void> navigateToFeed(BuildContext context) async {
-    return await Navigator.pushNamedAndRemoveUntil<void>(
-      context,
-      ReviewRoutes.feed,
-      (_) => false,
-    );
+  void getImagesPath(List<String> paths) {
+    if (paths.isNotEmpty) {
+      photosPath = paths;
+    }
+  }
+
+  Future<void> onErrorGettingImage(ReviewError error) async {
+    value = CreateReviewErrorState(error: error);
+  }
+
+  bool photosValidator() {
+    if (photosPath.isEmpty) return false;
+    return true;
+  }
+
+  String? titleValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Informe um título';
+    if (value.length < 3) return 'Título muito curto';
+    return null;
+  }
+
+  String? bodyValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Informe suas observações';
+    if (value.length < 10) return 'Observação muito curta';
+    return null;
   }
 }

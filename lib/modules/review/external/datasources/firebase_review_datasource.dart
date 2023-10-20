@@ -23,11 +23,15 @@ class FirebaseReviewDatasource implements IReviewDatasource {
 
   @override
   Future<ReviewEntity> create(ReviewEntity review) async {
+    final reviewId = const Uuid().v4();
     return await _firestore
         .collection('reviews')
-        .doc(review.id)
+        .doc(reviewId)
         .set(ReviewEntityExtension.toMap(
-          review.copyWith(authorId: _auth.currentUser!.uid),
+          review.copyWith(
+            id: reviewId,
+            authorId: _auth.currentUser!.uid,
+          ),
         ))
         .then((_) => review);
   }
@@ -115,5 +119,39 @@ class FirebaseReviewDatasource implements IReviewDatasource {
     }
 
     return photosDownloadURL;
+  }
+
+  @override
+  Future<List<ReviewEntity>> getMyReviews(
+      ReviewEntity? starterAfter, int? limit) {
+    if (starterAfter != null) {
+      return _firestore
+          .collection('reviews')
+          .orderBy('updatedAt', descending: true)
+          .where('authorId', isEqualTo: _auth.currentUser!.uid)
+          .startAfter([starterAfter])
+          .limit(limit ?? 25)
+          .get()
+          .then((querySnap) => querySnap.docs
+              .map(
+                (queryDocSnap) => ReviewEntityExtension.fromMap(
+                  queryDocSnap.data(),
+                ),
+              )
+              .toList());
+    }
+    return _firestore
+        .collection('reviews')
+        .orderBy('updatedAt', descending: true)
+        .where('authorId', isEqualTo: _auth.currentUser!.uid)
+        .limit(limit ?? 25)
+        .get()
+        .then((querySnap) => querySnap.docs
+            .map(
+              (queryDocSnap) => ReviewEntityExtension.fromMap(
+                queryDocSnap.data(),
+              ),
+            )
+            .toList());
   }
 }

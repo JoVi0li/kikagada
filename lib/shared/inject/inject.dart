@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
+import 'package:kikagada/modules/auth/domain/usecases/delete_account_usecase/delete_account_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/delete_account_usecase/delete_account_usecase_imp.dart';
+import 'package:kikagada/modules/auth/domain/usecases/get_user_usecase/get_user_usecase.dart';
+import 'package:kikagada/modules/auth/domain/usecases/get_user_usecase/get_user_usecase_imp.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase_imp.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
@@ -11,9 +15,11 @@ import 'package:kikagada/modules/auth/external/datasource/firebase_auth_datasour
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
 import 'package:kikagada/modules/auth/infra/repositories/auth_repository_imp.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
+import 'package:kikagada/modules/auth/presenter/stores/profile_store.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/delete_review_usecase/delete_review_usecase.dart';
+import 'package:kikagada/modules/review/domain/usecases/get_my_reviews_usecase/get_my_reviews_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_reviews_usecase/get_reviews_usecase.dart';
@@ -23,8 +29,10 @@ import 'package:kikagada/modules/review/external/datasources/firebase_review_dat
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
-import 'package:kikagada/modules/review/presenter/stores/feed_store.dart';
+import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
+import 'package:kikagada/modules/review/presenter/stores/my_reviews_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
+import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
 
 final class Inject {
   final GetIt _getIt = GetIt.I;
@@ -32,6 +40,7 @@ final class Inject {
   Inject._() {
     authModule();
     reviewModule();
+    shared();
   }
 
   void authModule() {
@@ -43,8 +52,14 @@ final class Inject {
         () => LoginWithGoogleUsecaseImp(repository: _getIt()));
     _getIt.registerLazySingleton<ILoginWithAppleUsecase>(
         () => LoginWithAppleUsecaseImp(repository: _getIt()));
+    _getIt.registerLazySingleton<IDeleteAccountUsecase>(
+        () => DeleteAccountUsecase(repository: _getIt()));
+    _getIt.registerLazySingleton<IGetUserUsecase>(
+        () => GetUserUsecase(repository: _getIt()));
     _getIt.registerLazySingleton<LoginStore>(
         () => LoginStore(_getIt(), _getIt()));
+    _getIt.registerLazySingleton<IProfileStore>(
+        () => ProfileStore(_getIt(), _getIt()));
   }
 
   void reviewModule() {
@@ -69,11 +84,21 @@ final class Inject {
         () => GetPhotosDownloadURL(repository: _getIt()));
     _getIt.registerLazySingleton<IUploadPhotosUsecase>(
         () => UploadPhotosUsecase(repository: _getIt()));
+    _getIt.registerLazySingleton<IGetMyReviewsUsecase>(
+        () => GetMyReviewsUsecase(_getIt()));
     _getIt.registerLazySingleton<IReviewDetailsStore>(
         () => ReviewDetailsStore(_getIt(), _getIt(), _getIt()));
-    _getIt.registerLazySingleton<IFeedStore>(() => FeedStore(_getIt()));
-    _getIt.registerLazySingleton<ICreateReviewStore>(
-        () => CreateReviewStore(_getIt(), _getIt()));
+    _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
+    _getIt
+        .registerLazySingleton<IMyReviewsStore>(() => MyReviewsStore(_getIt()));
+    _getIt
+        .registerLazySingleton<CreateReviewStore>(() => CreateReviewStore(_getIt(), _getIt()));
+  }
+
+  void shared() {
+    _getIt.registerLazySingleton<NavigationBarController>(
+      () => NavigationBarController(),
+    );
   }
 
   factory Inject.initialize() {

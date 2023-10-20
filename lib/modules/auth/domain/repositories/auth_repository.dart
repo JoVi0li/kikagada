@@ -4,4 +4,6 @@ import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 abstract interface class IAuthRepository {
   Future<(UserEntity? user, AuthError? error)> loginWithGoogle();
   Future<(UserEntity? user, AuthError? error)> loginWithApple();
+  Future<(UserEntity? deletedUser, AuthError? failure)> getUser();
+  Future<(UserEntity? deletedUser, AuthError? failure)> deleteAccount();
 }
