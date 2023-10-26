@@ -22,10 +22,6 @@ Kikagada is more than just an app; it's a community passionate about clean and w
 2. Log in to access all features.
 3. Start discovering and reviewing restrooms in your area and around the world.
 
-## Contributions
-
-If you're a clean restroom enthusiast and want to contribute to Kikagada, feel free to open issues, propose new features, or submit pull requests. We believe that together, we can improve everyone's restroom experience.
-
 ## Tech Stack
 
  - **Language**: Dart
