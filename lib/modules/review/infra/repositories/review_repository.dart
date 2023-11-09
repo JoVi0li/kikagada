@@ -14,6 +14,11 @@ class ReviewRepository implements IReviewRepository {
   Future<(ReviewEntity?, ReviewError?)> create(ReviewEntity review) async {
     try {
       return (await _datasource.create(review), null);
+    } on FirebaseException catch (e) {
+      return (
+        null,
+        GenericFirebaseReviewError(error: e.code, message: e.message)
+      );
     } catch (e) {
       return (null, GenericReviewError(error: e.toString(), message: null));
     }
