@@ -24,20 +24,20 @@ void main() {
     test(
       'LoadingReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(LoadingReviewDetailsState(), isA<ReviewDetailsState>());
+        expect(ReviewDetailsLoadingState(), isA<ReviewDetailsState>());
       },
     );
     test(
       'SuccessReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(SuccessReviewDetailsState(review: review),
+        expect(ReviewDetailsSuccessState(review: review),
             isA<ReviewDetailsState>());
       },
     );
     test(
       'ErrorReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(ErrorReviewDetailsState(error: error), isA<ReviewDetailsState>());
+        expect(ReviewDetailsErrorState(error: error), isA<ReviewDetailsState>());
       },
     );
   });
