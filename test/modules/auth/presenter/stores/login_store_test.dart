@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
+import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
@@ -12,12 +14,12 @@ class LoginWithAppleUsecaseMock extends Mock
 class LoginWithGoogleUsecaseMock extends Mock
     implements ILoginWithGoogleUsecase {}
 
-/// TODO: Refactor tests
 void main() {
   late final LoginStore store;
   late final ILoginWithAppleUsecase loginWithAppleUsecase;
   late final ILoginWithGoogleUsecase loginWithGoogleUsecase;
   late final UserEntity entity;
+  late final AuthError error;
 
   setUpAll(() {
     loginWithAppleUsecase = LoginWithAppleUsecaseMock();
@@ -28,6 +30,7 @@ void main() {
       email: 'joao@gmail.com',
       photo: null,
     );
+    error = GenericAuthError(error: 'error');
     store = LoginStore(loginWithGoogleUsecase, loginWithAppleUsecase);
   });
 
@@ -38,6 +41,7 @@ void main() {
 
     test('should return loading state on execute loginWithApple method',
         () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
       when(() => loginWithAppleUsecase()).thenAnswer(
         (_) => Future.value((entity, null)),
       );
@@ -51,6 +55,7 @@ void main() {
 
     test('should return loading state on execute loginWithGoogle method',
         () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
       when(() => loginWithGoogleUsecase()).thenAnswer(
         (_) => Future.value((entity, null)),
       );
@@ -64,6 +69,7 @@ void main() {
 
     test('should return success state after execute loginWithApple method',
         () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
       when(() => loginWithAppleUsecase()).thenAnswer(
         (_) => Future.value((entity, null)),
       );
@@ -75,6 +81,7 @@ void main() {
 
     test('should return success state after execute loginWithGoogle method',
         () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
       when(() => loginWithGoogleUsecase()).thenAnswer(
         (_) => Future.value((entity, null)),
       );
@@ -82,6 +89,30 @@ void main() {
       await store.login();
 
       expect(store.value, isA<LoginSuccessState>());
+    });
+
+    test('should return error state after execute loginWithApple method',
+        () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      when(() => loginWithAppleUsecase()).thenAnswer(
+        (_) => Future.value((null, error)),
+      );
+
+      await store.login();
+
+      expect(store.value, isA<LoginErrorState>());
+    });
+
+    test('should return error state after execute loginWithGoogle method',
+        () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      when(() => loginWithGoogleUsecase()).thenAnswer(
+        (_) => Future.value((null, error)),
+      );
+
+      await store.login();
+
+      expect(store.value, isA<LoginErrorState>());
     });
   });
 }
