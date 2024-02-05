@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
 import 'package:kikagada/modules/auth/presenter/stores/login_store.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
 class LoginWithAppleUsecaseMock extends Mock
@@ -19,7 +19,7 @@ void main() {
   late final ILoginWithAppleUsecase loginWithAppleUsecase;
   late final ILoginWithGoogleUsecase loginWithGoogleUsecase;
   late final UserEntity entity;
-  late final AuthError error;
+  late final BaseException error;
 
   setUpAll(() {
     loginWithAppleUsecase = LoginWithAppleUsecaseMock();
@@ -30,7 +30,7 @@ void main() {
       email: 'joao@gmail.com',
       photo: null,
     );
-    error = GenericAuthError(error: 'error');
+    error = BaseException.basicException(exception: Exception());
     store = LoginStore(loginWithGoogleUsecase, loginWithAppleUsecase);
   });
 

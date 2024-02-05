@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
 import 'package:kikagada/modules/auth/infra/repositories/auth_repository_imp.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
 class AuthDatasourceMock extends Mock implements IAuthDatasource {}
@@ -45,7 +45,7 @@ void main() {
       final (success, failure) = await repository.loginWithApple();
 
       expect(success, isNull);
-      expect(failure, isA<GenericAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test(
@@ -58,7 +58,7 @@ void main() {
       final (success, failure) = await repository.loginWithApple();
 
       expect(success, isNull);
-      expect(failure, isA<GenericFirebaseAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test('should return a success value when login with google', () async {
@@ -80,7 +80,7 @@ void main() {
       final (success, failure) = await repository.loginWithGoogle();
 
       expect(success, isNull);
-      expect(failure, isA<GenericAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test(
@@ -93,7 +93,7 @@ void main() {
       final (success, failure) = await repository.loginWithGoogle();
 
       expect(success, isNull);
-      expect(failure, isA<GenericFirebaseAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test('should return a success value when delete account', () async {
@@ -117,7 +117,7 @@ void main() {
       final (success, failure) = await repository.deleteAccount();
 
       expect(success, isNull);
-      expect(failure, isA<GenericAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test(
@@ -130,7 +130,7 @@ void main() {
       final (success, failure) = await repository.deleteAccount();
 
       expect(success, isNull);
-      expect(failure, isA<GenericFirebaseAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test('should return a success value when get user', () async {
@@ -152,7 +152,7 @@ void main() {
       final (success, failure) = await repository.getUser();
 
       expect(success, isNull);
-      expect(failure, isA<GenericAuthError>());
+      expect(failure, isA<BaseException>());
     });
 
     test(
@@ -165,7 +165,7 @@ void main() {
       final (success, failure) = await repository.getUser();
 
       expect(success, isNull);
-      expect(failure, isA<GenericFirebaseAuthError>());
+      expect(failure, isA<BaseException>());
     });
   });
 }
