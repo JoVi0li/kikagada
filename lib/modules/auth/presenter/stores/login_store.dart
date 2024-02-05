@@ -23,10 +23,10 @@ class LoginStore extends ValueNotifier<LoginState> {
   Future<void> _loginWithGoogle() async {
     value = LoginLoadingState();
 
-    final (user, error) = await _loginWithGoogleUsecase();
+    final (user, exception) = await _loginWithGoogleUsecase();
 
-    if (error != null) {
-      value = LoginErrorState(error: error);
+    if (exception != null) {
+      value = LoginErrorState(exception: exception);
     }
 
     if (user != null) {
@@ -37,10 +37,10 @@ class LoginStore extends ValueNotifier<LoginState> {
   Future<void> _loginWithApple() async {
     value = LoginLoadingState();
 
-    final (user, error) = await _loginWithAppleUsecase();
+    final (user, exception) = await _loginWithAppleUsecase();
 
-    if (error != null) {
-      value = LoginErrorState(error: error);
+    if (exception != null) {
+      value = LoginErrorState(exception: exception);
     }
 
     if (user != null) {

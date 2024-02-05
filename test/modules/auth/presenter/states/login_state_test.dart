@@ -23,7 +23,7 @@ void main() {
     });
 
     test('LoginErrorState should be a subclass of LoginState', () {
-      expect(LoginErrorState(error: error), isA<LoginState>());
+      expect(LoginErrorState(exception: error), isA<LoginState>());
     });
   });
 }

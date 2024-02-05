@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   builder: (ctx) {
                     return DialogComponent(
                       title: 'Erro ao realizar login',
-                      content: state.error.message ?? "",
+                      content: state.exception.message ?? "",
                     );
                   },
                 );

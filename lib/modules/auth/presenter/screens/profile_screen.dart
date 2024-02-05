@@ -44,25 +44,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ValueListenableBuilder(
         valueListenable: _store,
         builder: (ctx, state, child) {
-          switch (state) {
-            case ProfileLoadingState():
-              return const ProfileLoadingWidget();
-            case ProfileRetrievedAccountState():
-              return DisplayUserInfosWidget(
-                state.user,
+          return switch (state) {
+            ProfileLoadingState() => const ProfileLoadingWidget(),
+            (ProfileRetrievedAccountState retrieved) => DisplayUserInfosWidget(
+                retrieved.user,
                 onDeleteAccount: _store.initDeleteAccountFlow,
-              );
-            case ProfileDeletedAccountState():
-              return const ProfileLoadingWidget();
-            case ProfileInitDeleteAccountFlowState():
-              return DeleteAccountWidget(
-                state.user,
+              ),
+            ProfileDeletedAccountState() => const ProfileLoadingWidget(),
+            (ProfileInitDeleteAccountFlowState deleted) => DeleteAccountWidget(
+                deleted.user,
                 onCancel: _store.cancelDeleteAccountFlow,
                 onConfirm: _store.deleteAccount,
-              );
-            default:
-              return const ProfileLoadingWidget();
-          }
+              ),
+            ProfileErrorState() => Container(),
+          };
         },
       ),
     );

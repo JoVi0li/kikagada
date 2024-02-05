@@ -1,7 +1,7 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 import 'package:kikagada/shared/exceptions/base_exception.dart';
 
-abstract base class ProfileState {}
+sealed class ProfileState {}
 
 final class ProfileLoadingState extends ProfileState {}
 
