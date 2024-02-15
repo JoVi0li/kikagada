@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_error_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_initial_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_loading_widget.dart';
@@ -11,8 +11,8 @@ sealed class CreateReviewWidget {
     return const CreateReviewInitialWidget();
   }
 
-  static Widget error(ReviewError error) {
-    return CreateReviewErrorWidget(error: error);
+  static Widget error(BaseException error) {
+    return CreateBaseExceptionWidget(error: error);
   }
 
   static Widget loading() {

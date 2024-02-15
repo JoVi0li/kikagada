@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/widgets/home_widgets/home_error_widget.dart';
 import 'package:kikagada/modules/review/presenter/widgets/home_widgets/loading_reviews_widgets.dart';
 import 'package:kikagada/modules/review/presenter/widgets/home_widgets/reviews_list_widget.dart';
@@ -19,7 +19,7 @@ sealed class HomeWidget {
     return const LoadingReviewsWidget();
   }
 
-  static Widget error(ReviewError error) {
+  static Widget error(BaseException error) {
     return HomeErrorWidget(
       error,
       tryAgain: () => {},

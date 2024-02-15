@@ -1,5 +1,5 @@
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 sealed class ReviewDetailsState {}
 
@@ -12,5 +12,5 @@ class ReviewDetailsSuccessState extends ReviewDetailsState {
 
 class ReviewDetailsErrorState extends ReviewDetailsState {
   ReviewDetailsErrorState({required this.error});
-  final ReviewError error;
+  final BaseException error;
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/presenter/widgets/create_review_widgets/create_review_initial_widget.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
-class CreateReviewErrorWidget extends StatelessWidget {
-  const CreateReviewErrorWidget({super.key, required this.error});
+class CreateBaseExceptionWidget extends StatelessWidget {
+  const CreateBaseExceptionWidget({super.key, required this.error});
 
-  final ReviewError error;
+  final BaseException error;
 
   void onPressed(BuildContext context) {
     Navigator.pop(context);
@@ -22,7 +22,7 @@ class CreateReviewErrorWidget extends StatelessWidget {
         builder: (ctx) {
           return DialogComponent(
             title: 'Erro ao criar a review',
-            content: error.error,
+            content: error.exception.toString(),
             actions: [
               ButtonComponent(
                 onPressed: () => onPressed(context),

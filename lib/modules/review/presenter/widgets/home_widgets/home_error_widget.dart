@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/widgets/home_widgets/reviews_not_found_widget.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
@@ -7,7 +7,7 @@ import 'package:kikagada/shared/components/dialog_component.dart';
 class HomeErrorWidget extends StatelessWidget {
   const HomeErrorWidget(this.error, {super.key, required this.tryAgain});
 
-  final ReviewError error;
+  final BaseException error;
   final void Function() tryAgain;
 
   void onPressed(BuildContext context) {
@@ -24,7 +24,7 @@ class HomeErrorWidget extends StatelessWidget {
         builder: (ctx) {
           return DialogComponent(
             title: 'Erro ao recuperar as reviews',
-            content: error.error,
+            content: error.exception.toString(),
             actions: [
               ButtonComponent(
                 onPressed: () => onPressed(context),

@@ -45,7 +45,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           return switch (state) {
             CreateReviewInitialState() => CreateReviewWidget.initial(),
             CreateReviewLoadingState() => CreateReviewWidget.loading(),
-            CreateReviewErrorState() => CreateReviewWidget.error(state.error),
+            CreateBaseExceptionState() => CreateReviewWidget.error(state.error),
             CreateReviewHasNoPhotosState() =>
               CreateReviewWidget.hasNoPhoto(ctx),
             CreateReviewSuccessState() =>
