@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
-import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/loadind_my_reviews_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/loading_my_reviews_widget.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
 
@@ -34,6 +34,6 @@ class MyReviewsErrorWidget extends StatelessWidget {
         },
       );
     });
-    return const LoadinMyReviewsWidget();
+    return const LoadingMyReviewsWidget();
   }
 }
