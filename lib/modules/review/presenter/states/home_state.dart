@@ -1,7 +1,7 @@
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
 import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 
-abstract base class HomeState {}
+sealed class HomeState {}
 
 final class HomeEmptyState extends HomeState {}
 
