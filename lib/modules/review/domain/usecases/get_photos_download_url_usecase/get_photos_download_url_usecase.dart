@@ -1,8 +1,8 @@
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 abstract interface class IGetPhotosDownloadURL {
-  Future<(List<String>? success, ReviewError? error)> call(
+  Future<(List<String>? success, BaseException? error)> call(
       List<String> photosPath);
 }
 
@@ -13,7 +13,7 @@ class GetPhotosDownloadURL implements IGetPhotosDownloadURL {
   final IReviewRepository _repository;
 
   @override
-  Future<(List<String>?, ReviewError?)> call(List<String> photosPath) async {
+  Future<(List<String>?, BaseException?)> call(List<String> photosPath) async {
     return await _repository.getPhotosDownloadURL(photosPath);
   }
 }

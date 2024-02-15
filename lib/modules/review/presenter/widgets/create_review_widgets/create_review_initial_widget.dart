@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/components/gallery_view_component.dart';
 import 'package:kikagada/modules/review/presenter/stores/create_review_store.dart';
 import 'package:kikagada/shared/components/button_component.dart';
@@ -25,15 +25,15 @@ class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
   Future<void> pickImages() async {
     try {
       await handleRequestPermissions();
-      
+
       final result =
           await picker.pickFiles(type: FileType.image, allowMultiple: true);
 
       if (result == null || result.count == 0) return;
 
       if (result.count > 3) {
-        throw GenericReviewError(
-          error: 'Selecione no máximo 3 fotos',
+        throw BaseException.basicException(
+          exception: Exception('Selecione no máximo 3 fotos'),
           message: 'Tente novamente e respeito o limite',
         );
       }
@@ -42,12 +42,14 @@ class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
 
       _store.getImagesPath(paths);
       setState(() {});
-    } on ReviewError catch (e) {
+    } on BaseException catch (e) {
       _store.onErrorGettingImage(e);
     } catch (e) {
       _store.onErrorGettingImage(
-        GenericReviewError(
-          error: 'Não foi possível selecionar as fotos. Tente novamente',
+        BaseException.basicException(
+          exception: Exception(
+            'Não foi possível selecionar as fotos. Tente novamente',
+          ),
           message: null,
         ),
       );

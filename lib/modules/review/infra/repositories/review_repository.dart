@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart' as firebase;
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 class ReviewRepository implements IReviewRepository {
   ReviewRepository({required IReviewDatasource datasource})
@@ -11,118 +11,203 @@ class ReviewRepository implements IReviewRepository {
   final IReviewDatasource _datasource;
 
   @override
-  Future<(ReviewEntity?, ReviewError?)> create(ReviewEntity review) async {
+  Future<(ReviewEntity?, BaseException?)> create(ReviewEntity review) async {
     try {
       return (await _datasource.create(review), null);
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } on firebase.FirebaseException catch (e, s) {
+      return (
+        null,
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
+      );
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(ReviewEntity?, ReviewError?)> delete(String id) async {
+  Future<(ReviewEntity?, BaseException?)> delete(String id) async {
     try {
       return (await _datasource.delete(id), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(ReviewEntity?, ReviewError?)> getById(String id) async {
+  Future<(ReviewEntity?, BaseException?)> getById(String id) async {
     try {
       return (await _datasource.getById(id), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(ReviewEntity?, ReviewError?)> update(ReviewEntity review) async {
+  Future<(ReviewEntity?, BaseException?)> update(ReviewEntity review) async {
     try {
       return (await _datasource.update(review), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(List<ReviewEntity>?, ReviewError?)> getReviews(
+  Future<(List<ReviewEntity>?, BaseException?)> getReviews(
     ReviewEntity? starterAfter,
     int? limit,
   ) async {
     try {
       return (await _datasource.getReviews(starterAfter, limit), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(List<String>?, ReviewError?)> uploadPhotos(
+  Future<(List<String>?, BaseException?)> uploadPhotos(
       List<String> photosPath) async {
     try {
       return (await _datasource.uploadPhotos(photosPath), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(List<String>?, ReviewError?)> getPhotosDownloadURL(
+  Future<(List<String>?, BaseException?)> getPhotosDownloadURL(
     List<String> photosPath,
   ) async {
     try {
       return (await _datasource.getPhotosDownloadURL(photosPath), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 
   @override
-  Future<(List<ReviewEntity>?, ReviewError?)> getMyReviews(
+  Future<(List<ReviewEntity>?, BaseException?)> getMyReviews(
     ReviewEntity? starterAfter,
     int? limit,
   ) async {
     try {
       return (await _datasource.getMyReviews(starterAfter, limit), null);
-    } on FirebaseException catch (e) {
+    } on firebase.FirebaseException catch (e, s) {
       return (
         null,
-        GenericFirebaseReviewError(error: e.code, message: e.message)
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
+          message: e.message,
+        ),
       );
-    } catch (e) {
-      return (null, GenericReviewError(error: e.toString(), message: null));
+    } catch (e, s) {
+      return (
+        null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
+        ),
+      );
     }
   }
 }

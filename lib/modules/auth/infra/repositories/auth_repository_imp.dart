@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/infra/datasources/auth_datasource.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 final class AuthRepositoryImp implements IAuthRepository {
   final IAuthDatasource _datasource;
@@ -11,96 +11,100 @@ final class AuthRepositoryImp implements IAuthRepository {
       : _datasource = datasource;
 
   @override
-  Future<(UserEntity? user, AuthError? error)> loginWithApple() async {
+  Future<(UserEntity? user, BaseException? error)> loginWithApple() async {
     try {
       final result = await _datasource.loginWithApple();
       return (result, null);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e, s) {
       return (
         null,
-        GenericFirebaseAuthError(
-          error: e.code,
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
           message: e.message,
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       return (
         null,
-        GenericAuthError(
-          error: e.toString(),
-          message: null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
         ),
       );
     }
   }
 
   @override
-  Future<(UserEntity? user, AuthError? error)> loginWithGoogle() async {
+  Future<(UserEntity? user, BaseException? error)> loginWithGoogle() async {
     try {
       final result = await _datasource.loginWithGoogle();
       return (result, null);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e, s) {
       return (
         null,
-        GenericFirebaseAuthError(
-          error: e.code,
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
           message: e.message,
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       return (
         null,
-        GenericAuthError(
-          error: e.toString(),
-          message: null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
         ),
       );
     }
   }
 
   @override
-  Future<(UserEntity?, AuthError?)> deleteAccount() async {
+  Future<(UserEntity?, BaseException?)> deleteAccount() async {
     try {
       final result = await _datasource.deleteAccount();
       return (result, null);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e, s) {
       return (
         null,
-        GenericFirebaseAuthError(
-          error: e.code,
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
           message: e.message,
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       return (
         null,
-        GenericAuthError(
-          error: e.toString(),
-          message: null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
         ),
       );
     }
   }
 
   @override
-  Future<(UserEntity?, AuthError?)> getUser() async {
+  Future<(UserEntity?, BaseException?)> getUser() async {
     try {
       final result = await _datasource.getUser();
       return (result, null);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e, s) {
       return (
         null,
-        GenericFirebaseAuthError(
-          error: e.code,
+        BaseException.firebaseException(
+          stackTrace: s,
+          exception: e,
           message: e.message,
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       return (
         null,
-        GenericAuthError(
-          error: e.toString(),
-          message: null,
+        BaseException.basicException(
+          stackTrace: s,
+          exception: e as Exception,
         ),
       );
     }

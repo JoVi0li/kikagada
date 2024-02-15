@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/update_review_usecase/update_review_usecase.dart';
@@ -19,7 +19,7 @@ void main() {
   late final IUpdateReviewUsecase updateReviewUsecase;
   late final IGetPhotosDownloadURL getPhotosDownloadURL;
   late final ReviewEntity review;
-  late final ReviewError error;
+  late final BaseException error;
   late final ReviewDetailsStore store;
 
   setUpAll(() {
@@ -40,14 +40,14 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = GenericFirebaseReviewError(error: 'error', message: null);
+    error = BaseException.firebaseException(exception: Exception('error'), message: null);
     registerFallbackValue("01");
     registerFallbackValue(review);
     registerFallbackValue([""]);
   });
   group('review details store tests', () {
     test('should return loading state on create store', () {
-      expect(store.value, isA<LoadingReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsLoadingState>());
     });
 
     test('should return loading state while execute tasks', () async {
@@ -58,7 +58,7 @@ void main() {
 
       final getById = store.getById('01');
 
-      expect(store.value, isA<LoadingReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsLoadingState>());
 
       await getById;
     });
@@ -71,7 +71,7 @@ void main() {
 
       await store.getById("01");
 
-      expect(store.value, isA<SuccessReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsSuccessState>());
     });
 
     test('should return error state on getById', () async {
@@ -80,7 +80,19 @@ void main() {
 
       await store.getById("01");
 
-      expect(store.value, isA<ErrorReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsErrorState>());
+    });
+
+    test(
+        'should return error state on getById after tried get the photos download url',
+        () async {
+      when(() => getReviewByIdUsecase(any()))
+          .thenAnswer((_) => Future.value((review, null)));
+      when(() => getPhotosDownloadURL(any()))
+          .thenAnswer((_) => Future.value((null, error)));
+      await store.getById("01");
+
+      expect(store.value, isA<ReviewDetailsErrorState>());
     });
 
     test('should return success state on update', () async {
@@ -89,7 +101,7 @@ void main() {
 
       await store.update(review);
 
-      expect(store.value, isA<SuccessReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsSuccessState>());
     });
 
     test('should return error state on update', () async {
@@ -98,7 +110,7 @@ void main() {
 
       await store.update(review);
 
-      expect(store.value, isA<ErrorReviewDetailsState>());
+      expect(store.value, isA<ReviewDetailsErrorState>());
     });
   });
 }

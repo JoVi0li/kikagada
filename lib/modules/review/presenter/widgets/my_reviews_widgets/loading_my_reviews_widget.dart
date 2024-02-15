@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class LoadinMyReviewsWidget extends StatelessWidget {
-  const LoadinMyReviewsWidget({super.key});
+class LoadingMyReviewsWidget extends StatelessWidget {
+  const LoadingMyReviewsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,27 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 void main() {
   group('auth errors tests...', () {
-
-    test('Should create correctly a GenericAuthError entity', () {
-      expect(GenericAuthError(error: 'Error'), isA<GenericAuthError>());
-    });
-    
-    test('Should create correctly a GenericFirebaseAuthError entity', () {
-      expect(GenericFirebaseAuthError(error: 'Error'), isA<GenericFirebaseAuthError>());
+    test('Should create correctly a BasicException entity', () {
+      expect(
+        BaseException.basicException(exception: Exception(), message: 'Error'),
+        isA<BasicException>(),
+      );
     });
 
-    test(
-        'Should thrown an assertion error when GenericAuthError.error is empty',
-        () {
-      expect(() => GenericAuthError(error: ''), throwsAssertionError);
-    });
-
-    test(
-        'Should thrown an assertion error when GenericFirebaseAuthError.error is empty',
-        () {
-      expect(() => GenericFirebaseAuthError(error: ''), throwsAssertionError);
+    test('Should create correctly a FirebaseException entity', () {
+      expect(
+        BaseException.firebaseException(exception: Exception(), message: 'Error'),
+        isA<FirebaseException>(),
+      );
     });
   });
 }

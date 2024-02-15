@@ -27,10 +27,10 @@ class ReviewDetailsStore extends ValueNotifier<ReviewDetailsState>
   Future<void> getById(String id) async {
     value = ReviewDetailsLoadingState();
 
-    final (review, reviewError) = await _getReviewByIdUsecase(id);
+    final (review, baseException) = await _getReviewByIdUsecase(id);
 
-    if (reviewError != null) {
-      value = ReviewDetailsErrorState(error: reviewError);
+    if (baseException != null) {
+      value = ReviewDetailsErrorState(error: baseException);
       return;
     }
 

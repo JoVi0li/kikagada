@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/states/review_details_state.dart';
 
 void main() {
   late final ReviewEntity review;
-  late final ReviewError error;
+  late final BaseException error;
 
   setUpAll(() {
     review = ReviewEntity(
@@ -17,27 +17,28 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = GenericFirebaseReviewError(error: 'error', message: null);
+    error = BaseException.firebaseException(exception: Exception('error'), message: null);
   });
 
   group('review details state tests', () {
     test(
       'LoadingReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(LoadingReviewDetailsState(), isA<ReviewDetailsState>());
+        expect(ReviewDetailsLoadingState(), isA<ReviewDetailsState>());
       },
     );
     test(
       'SuccessReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(SuccessReviewDetailsState(review: review),
+        expect(ReviewDetailsSuccessState(review: review),
             isA<ReviewDetailsState>());
       },
     );
     test(
       'ErrorReviewDetailsState should be a subclass from ReviewDetailsState',
       () {
-        expect(ErrorReviewDetailsState(error: error), isA<ReviewDetailsState>());
+        expect(
+            ReviewDetailsErrorState(error: error), isA<ReviewDetailsState>());
       },
     );
   });

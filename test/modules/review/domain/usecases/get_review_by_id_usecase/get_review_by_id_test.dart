@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:mocktail/mocktail.dart';
@@ -10,7 +10,7 @@ class ReviewRepositoryMock extends Mock implements IReviewRepository {}
 void main() {
   late final ReviewRepositoryMock repository;
   late final ReviewEntity review;
-  late final ReviewError error;
+  late final BaseException error;
   late final IGetReviewByIdUsecase usecase;
 
   setUpAll(() {
@@ -24,7 +24,7 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = GenericReviewError(error: 'error', message: null);
+    error = BaseException.basicException(exception: Exception('error'), message: null);
     usecase = GetReviewByIdUsecase(repository: repository);
     registerFallbackValue("01");
   });
@@ -43,7 +43,7 @@ void main() {
       expect(success!.authorId, '01');
     });
 
-    test('should return a ReviewError instance', () async {
+    test('should return a BaseException instance', () async {
       when(() => repository.getById(any())).thenAnswer(
         (_) => Future(() => (null, error)),
       );
@@ -52,8 +52,8 @@ void main() {
 
       expect(success, isNull);
       expect(failure, isNotNull);
-      expect(failure, isA<ReviewError>());
-      expect(failure!.error, 'error');
+      expect(failure, isA<BaseException>());
+      expect(failure!.exception.toString(), 'Exception: error');
     });
   });
 }

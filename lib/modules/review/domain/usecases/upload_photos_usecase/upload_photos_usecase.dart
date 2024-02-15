@@ -1,8 +1,9 @@
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 abstract interface class IUploadPhotosUsecase {
-  Future<(List<String>? success, ReviewError? error)> call(List<String> photos);
+  Future<(List<String>? success, BaseException? error)> call(
+      List<String> photos);
 }
 
 final class UploadPhotosUsecase implements IUploadPhotosUsecase {
@@ -11,7 +12,7 @@ final class UploadPhotosUsecase implements IUploadPhotosUsecase {
   final IReviewRepository _repository;
 
   @override
-  Future<(List<String>?, ReviewError?)> call(List<String> photos) async {
+  Future<(List<String>?, BaseException?)> call(List<String> photos) async {
     return await _repository.uploadPhotos(photos);
   }
 }

@@ -3,9 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/states/home_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
 import 'package:kikagada/modules/review/presenter/widgets/home_widgets/home_error_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/home_widgets/loading_reviews_widgets.dart';
-import 'package:kikagada/modules/review/presenter/widgets/home_widgets/reviews_list_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/home_widgets/reviews_not_found_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/home_widgets/home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void tryAgain() async {
+    return await _store.getReviews(null, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,20 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ValueListenableBuilder(
         valueListenable: _store,
-        builder: (ctx, state, widget) {
-          switch (state) {
-            case HomeEmptyState():
-              return const ReviewsNotFoundWidget();
-            case HomeLoadingState():
-              return const LoadingReviewsWidget();
-            case HomeSuccessState():
-              return ReviewsListWidget(state.reviews);
-            case HomeErrorState():
-              return HomeErrorWidget(state.error,
-                  tryAgain: () => _store.getReviews(null, null));
-            default:
-              return const LoadingReviewsWidget();
-          }
+        builder: (ctx, state, _) {
+          return switch (state) {
+            HomeEmptyState() => HomeWidget.notFound(),
+            HomeLoadingState() => HomeWidget.loading(),
+            (HomeSuccessState success) =>
+              HomeWidget.listReviews(success.reviews),
+            (HomeErrorState error) =>
+              HomeErrorWidget(error.error, tryAgain: tryAgain),
+          };
         },
       ),
     );

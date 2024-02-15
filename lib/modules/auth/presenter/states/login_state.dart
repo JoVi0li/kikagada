@@ -1,6 +1,6 @@
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
-abstract base class LoginState {}
+sealed class LoginState {}
 
 final class LoginInitialState implements LoginState {}
 
@@ -9,6 +9,6 @@ final class LoginLoadingState implements LoginState {}
 final class LoginSuccessState implements LoginState {}
 
 final class LoginErrorState implements LoginState {
-  final AuthError error;
-  LoginErrorState({required this.error});
+  final BaseException exception;
+  LoginErrorState({required this.exception});
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
 import 'package:kikagada/modules/review/domain/usecases/create_review_usecase/create_review_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/upload_photos_usecase/upload_photos_usecase.dart';
 import 'package:kikagada/modules/review/presenter/states/create_review_state.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 final class CreateReviewStore extends ValueNotifier<CreateReviewState> {
   CreateReviewStore(this.createReviewUsecase, this.uploadPhotosUsecase)
@@ -52,7 +52,7 @@ final class CreateReviewStore extends ValueNotifier<CreateReviewState> {
     final (photos, uploadFailure) = await uploadPhotosUsecase(photosPath);
 
     if (uploadFailure != null) {
-      value = CreateReviewErrorState(error: uploadFailure);
+      value = CreateBaseExceptionState(error: uploadFailure);
       return;
     }
 
@@ -71,7 +71,7 @@ final class CreateReviewStore extends ValueNotifier<CreateReviewState> {
     final (success, failure) = await createReviewUsecase(review);
 
     if (failure != null) {
-      value = CreateReviewErrorState(error: failure);
+      value = CreateBaseExceptionState(error: failure);
       return;
     }
 
@@ -87,8 +87,8 @@ final class CreateReviewStore extends ValueNotifier<CreateReviewState> {
     }
   }
 
-  Future<void> onErrorGettingImage(ReviewError error) async {
-    value = CreateReviewErrorState(error: error);
+  Future<void> onErrorGettingImage(BaseException error) async {
+    value = CreateBaseExceptionState(error: error);
   }
 
   bool photosValidator() {

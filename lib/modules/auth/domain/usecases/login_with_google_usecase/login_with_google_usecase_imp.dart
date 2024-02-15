@@ -1,7 +1,7 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_google_usecase/login_with_google_usecase.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 final class LoginWithGoogleUsecaseImp implements ILoginWithGoogleUsecase {
   final IAuthRepository _repository;
@@ -10,7 +10,7 @@ final class LoginWithGoogleUsecaseImp implements ILoginWithGoogleUsecase {
       : _repository = repository;
 
   @override
-  Future<(UserEntity? user, AuthError? error)> call() async {
+  Future<(UserEntity? user, BaseException? error)> call() async {
     return await _repository.loginWithGoogle();
   }
 }

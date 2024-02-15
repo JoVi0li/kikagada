@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/states/review_details_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
-import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/error_review_details_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/review_details_loading_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/success_review_details_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/review_details_widget.dart';
 
 class ReviewDetailsScreen extends StatefulWidget {
   const ReviewDetailsScreen({super.key, required this.reviewId});
@@ -45,16 +43,14 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _store,
-          builder: (context, state, child) {            switch (state) {
-              case ReviewDetailsLoadingState():
-                return const ReviewDetailsLoadingWidget();
-              case ReviewDetailsSuccessState():
-                return SuccessReviewDetailsWidget(review: state.review);
-              case ReviewDetailsErrorState():
-                return ErrorReviewDetailsWidget(error: state.error);
-              default:
-                return const ReviewDetailsLoadingWidget();
-            }
+          builder: (context, state, child) {
+            return switch (state) {
+              ReviewDetailsLoadingState() => ReviewDetailsWidget.loading(),
+              ReviewDetailsSuccessState() =>
+                ReviewDetailsWidget.success(state.review),
+              ReviewDetailsErrorState() =>
+                ReviewDetailsWidget.error(state.error),
+            };
           },
         ),
       ),

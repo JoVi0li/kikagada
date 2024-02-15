@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase.dart';
 import 'package:kikagada/modules/auth/domain/usecases/login_with_apple_usecase/login_with_apple_usecase_imp.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
 class AuthRepositoryMock extends Mock implements IAuthRepository {}
@@ -12,7 +12,7 @@ void main() {
   late final ILoginWithAppleUsecase usecase;
   late final IAuthRepository repository;
   late final UserEntity entity;
-  late final AuthError error;
+  late final BaseException error;
 
   setUpAll(() {
     repository = AuthRepositoryMock();
@@ -23,7 +23,7 @@ void main() {
       email: 'joao@gmail.com',
       photo: null,
     );
-    error = GenericAuthError(error: 'Error');
+    error = BaseException.basicException(exception: Exception());
   });
 
   group('login with apple usecase imp tests', () {
@@ -46,7 +46,7 @@ void main() {
       final (success, failure) = await usecase();
 
       expect(success, isNull);
-      expect(failure, isA<AuthError>());
+      expect(failure, isA<BaseException>());
     });
   });
 }

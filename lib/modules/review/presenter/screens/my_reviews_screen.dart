@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/review/presenter/states/my_reviews_state.dart';
 import 'package:kikagada/modules/review/presenter/stores/my_reviews_store.dart';
-import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/loadind_my_reviews_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/my_reviews_error_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/my_reviews_list_widget.dart';
-import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/without_reviews_widget.dart';
+import 'package:kikagada/modules/review/presenter/widgets/my_reviews_widgets/my_reviews_widget.dart';
 
 class MyReviewsScreen extends StatefulWidget {
   const MyReviewsScreen({super.key});
@@ -31,6 +28,10 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
     super.dispose();
   }
 
+  void tryLoadReviewsAgain() async {
+    return await _store.getMyReviews(null, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,19 +44,14 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
       body: ValueListenableBuilder(
         valueListenable: _store,
         builder: (ctx, state, widget) {
-          switch (state) {
-            case MyReviewsWithoutDataState():
-              return const WithoutReviewsWidget();
-            case MyReviewsLoadingState():
-              return const LoadinMyReviewsWidget();
-            case MyReviewsSuccessState():
-              return MyReviewsListWidget(state.reviews);
-            case MyReviewsErrorState():
-              return MyReviewsErrorWidget(state.error,
-                  tryAgain: () => _store.getMyReviews(null, null));
-            default:
-              return const LoadinMyReviewsWidget();
-          }
+          return switch (state) {
+            MyReviewsWithoutDataState() => MyReviewsWidget.noData(),
+            MyReviewsLoadingState() => MyReviewsWidget.loading(),
+            MyReviewsSuccessState() =>
+              MyReviewsWidget.listReviews(state.reviews),
+            MyReviewsErrorState() =>
+              MyReviewsWidget.error(state.error, tryLoadReviewsAgain),
+          };
         },
       ),
     );

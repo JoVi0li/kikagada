@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/presenter/widgets/review_details_widgets/review_details_loading_widget.dart';
 import 'package:kikagada/shared/components/button_component.dart';
 import 'package:kikagada/shared/components/dialog_component.dart';
@@ -7,7 +7,7 @@ import 'package:kikagada/shared/components/navigation_bar/navigation_bar_compone
 
 class ErrorReviewDetailsWidget extends StatelessWidget {
   const ErrorReviewDetailsWidget({super.key, required this.error});
-  final ReviewError error;
+  final BaseException error;
 
   void onPressed(BuildContext context) async {
     Navigator.pop(context);
@@ -27,7 +27,7 @@ class ErrorReviewDetailsWidget extends StatelessWidget {
         builder: (ctx) {
           return DialogComponent(
             title: 'Erro ao carregar a review',
-            content: error.error,
+            content: error.exception.toString(),
             actions: [
               ButtonComponent(
                 onPressed: () => onPressed(context),

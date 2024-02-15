@@ -1,7 +1,7 @@
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
-abstract base class ProfileState {}
+sealed class ProfileState {}
 
 final class ProfileLoadingState extends ProfileState {}
 
@@ -22,5 +22,5 @@ final class ProfileInitDeleteAccountFlowState extends ProfileState {
 
 final class ProfileErrorState extends ProfileState {
   ProfileErrorState({required this.error});
-  final AuthError error;
+  final BaseException error;
 }

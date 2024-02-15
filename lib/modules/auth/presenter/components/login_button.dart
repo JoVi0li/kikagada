@@ -21,7 +21,9 @@ class LoginButton extends StatelessWidget {
       style: IconButton.styleFrom(
         shape: RoundedRectangleBorder(
           side: BorderSide(
-              color: Theme.of(context).colorScheme.secondary, width: 2.5),
+            color: Theme.of(context).colorScheme.secondary,
+            width: 2.5,
+          ),
           borderRadius: BorderRadius.circular(100),
         ),
       ),

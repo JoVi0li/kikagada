@@ -2,39 +2,101 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/auth/domain/entities/user_entity.dart';
 
 void main() {
-  late final UserEntity user;
-
-  setUpAll(() {
-    user = UserEntity(
-      id: '01',
-      name: 'João Vitor de Oliveira',
-      email: 'jaguatirica.0123@gmail.com',
-      photo: null,
-    );
-  });
-
-  group('user entity tests...', () {
-    test('Should create correctly a entity copy from UserEntity', () {
-      expect(user.copyWith(), isA<UserEntity>());
+  group('user entity tests', () {
+    test('should create an instance', () {
+      expect(
+        UserEntity(
+          id: '01',
+          name: 'João Vitor',
+          email: 'joao@email.com',
+          photo: null,
+        ),
+        isA<UserEntity>(),
+      );
     });
 
-    test('Should thrown an assertion error when id is empty', () {
-      expect(() => user.copyWith(id: ''), throwsAssertionError);
+    test('should create an instance from a Map', () {
+      expect(
+        UserEntity.fromMap({
+          'id': '01',
+          'name': 'João Vitor',
+          'email': 'joao@email.com',
+          'photo': null,
+        }),
+        isA<UserEntity>(),
+      );
     });
 
-    test('Should thrown an assertion error when name is empty', () {
-      expect(() => user.copyWith(name: ''), throwsAssertionError);
-    });
+    test('should create a copy of the instance', () {
+      final originalInstance = UserEntity(
+        id: '01',
+        name: 'João Vitor',
+        email: 'joao@email.com',
+        photo: null,
+      );
 
-    test('Should thrown an assertion error when email is empty', () {
-      expect(() => user.copyWith(email: ''), throwsAssertionError);
+      final copyInstance = originalInstance.copyWith();
+
+      expect(
+        copyInstance,
+        isA<UserEntity>(),
+      );
     });
 
     test(
-        'Should thrown an assertion error when email does not contain a @ character',
+        'should thrown an assertion error when try create an instance with empty id ',
         () {
       expect(
-          () => user.copyWith(email: 'joao_email.com'), throwsAssertionError);
+        () => UserEntity(
+          id: '',
+          name: 'João Vitor',
+          email: 'joao@email.com',
+          photo: null,
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test(
+        'should thrown an assertion error when try create an instance with empty name ',
+        () {
+      expect(
+        () => UserEntity(
+          id: '01',
+          name: '',
+          email: 'joao@email.com',
+          photo: null,
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test(
+        'should thrown an assertion error when try create an instance with empty email ',
+        () {
+      expect(
+        () => UserEntity(
+          id: '01',
+          name: 'João Vitor',
+          email: '',
+          photo: null,
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test(
+        'should thrown an assertion error when try create an instance with invalid email',
+        () {
+      expect(
+        () => UserEntity(
+          id: '01',
+          name: 'João Vitor',
+          email: 'joaoemail.com',
+          photo: null,
+        ),
+        throwsAssertionError,
+      );
     });
   });
 }

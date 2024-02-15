@@ -1,26 +1,26 @@
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 abstract interface class IReviewRepository {
-  Future<(ReviewEntity? success, ReviewError? error)> create(
+  Future<(ReviewEntity? success, BaseException? error)> create(
     ReviewEntity review,
   );
-  Future<(ReviewEntity? success, ReviewError? error)> update(
+  Future<(ReviewEntity? success, BaseException? error)> update(
     ReviewEntity review,
   );
-  Future<(ReviewEntity? success, ReviewError? error)> getById(String id);
-  Future<(ReviewEntity? success, ReviewError? error)> delete(String id);
-  Future<(List<ReviewEntity>? success, ReviewError? error)> getReviews(
+  Future<(ReviewEntity? success, BaseException? error)> getById(String id);
+  Future<(ReviewEntity? success, BaseException? error)> delete(String id);
+  Future<(List<ReviewEntity>? success, BaseException? error)> getReviews(
     ReviewEntity? starterAfter,
     int? limit,
   );
-  Future<(List<String>? success, ReviewError? error)> uploadPhotos(
+  Future<(List<String>? success, BaseException? error)> uploadPhotos(
     List<String> photosPath,
   );
-  Future<(List<String>? success, ReviewError? error)> getPhotosDownloadURL(
+  Future<(List<String>? success, BaseException? error)> getPhotosDownloadURL(
     List<String> photosPath,
   );
-  Future<(List<ReviewEntity>? success, ReviewError? failure)> getMyReviews(
+  Future<(List<ReviewEntity>? success, BaseException? failure)> getMyReviews(
     ReviewEntity? starterAfter,
     int? limit,
   );

@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kikagada/modules/auth/domain/errors/auth_errors.dart';
 import 'package:kikagada/modules/auth/presenter/states/login_state.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
 void main() {
-  late final AuthError error;
+  late final BaseException error;
 
   setUpAll(() {
-    error = GenericAuthError(error: 'Error');
+    error = BaseException.basicException(exception: Exception());
   });
 
   group('login state tests', () {
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('LoginErrorState should be a subclass of LoginState', () {
-      expect(LoginErrorState(error: error), isA<LoginState>());
+      expect(LoginErrorState(exception: error), isA<LoginState>());
     });
   });
 }

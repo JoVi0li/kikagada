@@ -1,7 +1,7 @@
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 
-abstract base class HomeState {}
+sealed class HomeState {}
 
 final class HomeEmptyState extends HomeState {}
 
@@ -14,5 +14,5 @@ final class HomeSuccessState extends HomeState {
 
 final class HomeErrorState extends HomeState {
   HomeErrorState({required this.error});
-  final ReviewError error;
+  final BaseException error;
 }
