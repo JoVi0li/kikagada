@@ -1,18 +1,20 @@
+import 'package:get_it/get_it.dart';
+import 'package:kikagada/shared/exceptions/crashlytics.dart';
+
 sealed class BaseException implements Exception {
   final Exception exception;
-  final StackTrace? stackTrace;
+  final StackTrace stackTrace;
   final String? message;
 
   BaseException({
     required this.exception,
-    this.stackTrace,
+    required this.stackTrace,
     this.message,
   });
 
-
   factory BaseException.basicException({
     required final Exception exception,
-    final StackTrace? stackTrace,
+    required final StackTrace stackTrace,
     final String? message,
   }) {
     return BasicException(
@@ -24,7 +26,7 @@ sealed class BaseException implements Exception {
 
   factory BaseException.firebaseException({
     required final Exception exception,
-    final StackTrace? stackTrace,
+    required final StackTrace stackTrace,
     final String? message,
   }) {
     return FirebaseException(
@@ -38,15 +40,19 @@ sealed class BaseException implements Exception {
 final class BasicException extends BaseException {
   BasicException({
     required super.exception,
-    super.stackTrace,
+    required super.stackTrace,
     super.message,
-  });
+  }) {
+    GetIt.instance<ICrashlytics>().recordError(exception, stackTrace, null);
+  }
 }
 
 final class FirebaseException extends BaseException {
   FirebaseException({
     required super.exception,
-    super.stackTrace,
+    required super.stackTrace,
     super.message,
-  });
+  }) {
+    GetIt.instance<ICrashlytics>().recordError(exception, stackTrace, null);
+  }
 }

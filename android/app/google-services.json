@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "405829735179-m5lsesplgsnbg0drrd3e8uci8n6h84kd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.kikagada",
+            "certificate_hash": "9b4a694c3a7b71166f913ff35e7221db474c4c6f"
+          }
+        },
+        {
           "client_id": "405829735179-kh7r88irq0c2bhlg17k4fmqho4ng6170.apps.googleusercontent.com",
           "client_type": 3
         }
