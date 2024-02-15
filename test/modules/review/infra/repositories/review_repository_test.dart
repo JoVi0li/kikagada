@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart' as firebase;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/domain/repositories/review_repository.dart';
 import 'package:kikagada/modules/review/infra/datasources/review_datasource.dart';
 import 'package:kikagada/modules/review/infra/repositories/review_repository.dart';
@@ -14,7 +14,7 @@ void main() {
   late IReviewRepository repository;
   late final ReviewEntity review;
   late final Exception error;
-  late final FirebaseException firebaseError;
+  late final firebase.FirebaseException firebaseError;
 
   setUpAll(() {
     datasource = ReviewDatasourceMock();
@@ -29,7 +29,7 @@ void main() {
       photos: ["https://photo"],
     );
     error = Exception('error');
-    firebaseError = FirebaseException(plugin: 'test');
+    firebaseError = firebase.FirebaseException(plugin: 'test');
     registerFallbackValue(review);
     registerFallbackValue("");
   });
@@ -49,18 +49,18 @@ void main() {
     });
   });
 
-  test('should return a GenericReviewError after tried create it', () async {
+  test('should return a BasicException after tried create it', () async {
     when(() => datasource.create(any())).thenThrow(error);
 
     final (success, failure) = await repository.create(review);
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
-  test('should return a GenericFirebaseReviewError after tried create it',
+  test('should return a FirebaseException after tried create it',
       () async {
     when(() => datasource.create(any())).thenThrow(firebaseError);
 
@@ -68,8 +68,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a ReviewEntity after get it', () async {
@@ -85,18 +85,18 @@ void main() {
     expect(success!.id, '01');
   });
 
-  test('should return a GenericReviewError after tried get it', () async {
+  test('should return a BasicException after tried get it', () async {
     when(() => datasource.getById(any())).thenThrow(error);
 
     final (success, failure) = await repository.getById('01');
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
-  test('should return a GenericFirebaseReviewError after tried get it',
+  test('should return a FirebaseException after tried get it',
       () async {
     when(() => datasource.getById(any())).thenThrow(firebaseError);
 
@@ -104,8 +104,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a list of ReviewEntity after get yourself reviews',
@@ -122,7 +122,7 @@ void main() {
     expect(success!.length, 1);
   });
 
-  test('should return a GenericReviewError after tried get yourself reviews',
+  test('should return a BasicException after tried get yourself reviews',
       () async {
     when(() => datasource.getMyReviews(null, null)).thenThrow(error);
 
@@ -130,12 +130,12 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test(
-      'should return a GenericFirebaseReviewError after tried get yourself reviews',
+      'should return a FirebaseException after tried get yourself reviews',
       () async {
     when(() => datasource.getMyReviews(null, null)).thenThrow(firebaseError);
 
@@ -143,8 +143,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a list of ReviewEntity after get a list of reviews',
@@ -161,7 +161,7 @@ void main() {
     expect(success!.length, 1);
   });
 
-  test('should return a GenericReviewError after tried get a list of reviews',
+  test('should return a BasicException after tried get a list of reviews',
       () async {
     when(() => datasource.getReviews(null, null)).thenThrow(error);
 
@@ -169,12 +169,12 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test(
-      'should return a GenericFirebaseReviewError after tried get a list of reviews',
+      'should return a FirebaseException after tried get a list of reviews',
       () async {
     when(() => datasource.getReviews(null, null)).thenThrow(firebaseError);
 
@@ -182,8 +182,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a ReviewEntity after deleted it', () async {
@@ -199,18 +199,18 @@ void main() {
     expect(success!.id, '01');
   });
 
-  test('should return a GenericReviewError after tried delete it', () async {
+  test('should return a BasicException after tried delete it', () async {
     when(() => datasource.delete(any())).thenThrow(error);
 
     final (success, failure) = await repository.delete('01');
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
-  test('should return a GenericFirebaseReviewError after tried delete it',
+  test('should return a FirebaseException after tried delete it',
       () async {
     when(() => datasource.delete(any())).thenThrow(firebaseError);
 
@@ -218,8 +218,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a ReviewEntity after updated it', () async {
@@ -235,18 +235,18 @@ void main() {
     expect(success!.id, '01');
   });
 
-  test('should return a GenericReviewError after tried update it', () async {
+  test('should return a BasicException after tried update it', () async {
     when(() => datasource.update(any())).thenThrow(error);
 
     final (success, failure) = await repository.update(review);
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
-  test('should return a GenericFirebaseReviewError after tried update it',
+  test('should return a FirebaseException after tried update it',
       () async {
     when(() => datasource.update(any())).thenThrow(firebaseError);
 
@@ -254,8 +254,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a list of photo paths after uploaded its', () async {
@@ -271,7 +271,7 @@ void main() {
     expect(success!.length, 1);
   });
 
-  test('should return a GenericReviewError after tried upload some photos',
+  test('should return a BasicException after tried upload some photos',
       () async {
     when(() => datasource.uploadPhotos(any())).thenThrow(error);
 
@@ -279,12 +279,12 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test(
-      'should return a GenericFirebaseReviewError after tried upload some photos',
+      'should return a FirebaseException after tried upload some photos',
       () async {
     when(() => datasource.uploadPhotos(any())).thenThrow(firebaseError);
 
@@ -292,8 +292,8 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test('should return a list of photos download url after get its', () async {
@@ -310,7 +310,7 @@ void main() {
   });
 
   test(
-      'should return a GenericReviewError after tried get a list of photos download url',
+      'should return a BasicException after tried get a list of photos download url',
       () async {
     when(() => datasource.getPhotosDownloadURL(any())).thenThrow(error);
 
@@ -318,12 +318,12 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<BasicException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 
   test(
-      'should return a GenericFirebaseReviewError after tried get a list of photos download url',
+      'should return a FirebaseException after tried get a list of photos download url',
       () async {
     when(() => datasource.getPhotosDownloadURL(any())).thenThrow(firebaseError);
 
@@ -331,7 +331,7 @@ void main() {
 
     expect(success, isNull);
     expect(failure, isNotNull);
-    expect(failure, isA<GenericFirebaseReviewError>());
-    expect(failure!.error, isNotEmpty);
+    expect(failure, isA<FirebaseException>());
+    expect(failure!.exception.toString(), isNotEmpty);
   });
 }

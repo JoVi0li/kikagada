@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kikagada/modules/review/domain/entities/review_entity.dart';
-import 'package:kikagada/modules/review/domain/errors/review_errors.dart';
+import 'package:kikagada/shared/exceptions/base_exception.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_photos_download_url_usecase/get_photos_download_url_usecase.dart';
 import 'package:kikagada/modules/review/domain/usecases/get_review_by_id_usecase/get_review_by_id.dart';
 import 'package:kikagada/modules/review/domain/usecases/update_review_usecase/update_review_usecase.dart';
@@ -19,7 +19,7 @@ void main() {
   late final IUpdateReviewUsecase updateReviewUsecase;
   late final IGetPhotosDownloadURL getPhotosDownloadURL;
   late final ReviewEntity review;
-  late final ReviewError error;
+  late final BaseException error;
   late final ReviewDetailsStore store;
 
   setUpAll(() {
@@ -40,7 +40,7 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = GenericFirebaseReviewError(error: 'error', message: null);
+    error = BaseException.firebaseException(exception: Exception('error'), message: null);
     registerFallbackValue("01");
     registerFallbackValue(review);
     registerFallbackValue([""]);
@@ -83,7 +83,9 @@ void main() {
       expect(store.value, isA<ReviewDetailsErrorState>());
     });
 
-    test('should return error state on getById after tried get the photos download url', () async {
+    test(
+        'should return error state on getById after tried get the photos download url',
+        () async {
       when(() => getReviewByIdUsecase(any()))
           .thenAnswer((_) => Future.value((review, null)));
       when(() => getPhotosDownloadURL(any()))
