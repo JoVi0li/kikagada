@@ -30,7 +30,7 @@ void main() {
       email: 'joao@gmail.com',
       photo: null,
     );
-    error = BaseException.basicException(exception: Exception());
+    error = BaseException.basicException(exception: Exception(), stackTrace: StackTrace.fromString(""));
     store = LoginStore(loginWithGoogleUsecase, loginWithAppleUsecase);
   });
 

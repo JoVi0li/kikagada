@@ -6,7 +6,7 @@ void main() {
   late final BaseException error;
 
   setUpAll(() {
-    error = BaseException.basicException(exception: Exception());
+    error = BaseException.basicException(exception: Exception(), stackTrace: StackTrace.fromString(""));
   });
 
   group('login state tests', () {

@@ -23,6 +23,9 @@ dependencies:
   permission_handler: ^11.0.1
   uuid: ^4.1.0
   shimmer: ^3.0.0
+  firebase_crashlytics: ^3.4.14
+  firebase_analytics: ^10.8.5
+  google_mobile_ads: ^4.0.0
 
 dev_dependencies:
   flutter_test:

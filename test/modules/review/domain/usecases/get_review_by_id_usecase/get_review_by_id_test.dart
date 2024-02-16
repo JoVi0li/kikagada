@@ -24,7 +24,7 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = BaseException.basicException(exception: Exception('error'), message: null);
+    error = BaseException.basicException(exception: Exception("error"), stackTrace: StackTrace.fromString(""));
     usecase = GetReviewByIdUsecase(repository: repository);
     registerFallbackValue("01");
   });

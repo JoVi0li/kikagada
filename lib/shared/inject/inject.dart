@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kikagada/modules/auth/domain/repositories/auth_repository.dart';
@@ -33,6 +34,7 @@ import 'package:kikagada/modules/review/presenter/stores/home_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/my_reviews_store.dart';
 import 'package:kikagada/modules/review/presenter/stores/review_details_store.dart';
 import 'package:kikagada/shared/components/navigation_bar/navigation_bar_controller.dart';
+import 'package:kikagada/shared/exceptions/crashlytics.dart';
 
 final class Inject {
   final GetIt _getIt = GetIt.I;
@@ -91,13 +93,16 @@ final class Inject {
     _getIt.registerLazySingleton<IHomeStore>(() => HomeStore(_getIt()));
     _getIt
         .registerLazySingleton<IMyReviewsStore>(() => MyReviewsStore(_getIt()));
-    _getIt
-        .registerLazySingleton<CreateReviewStore>(() => CreateReviewStore(_getIt(), _getIt()));
+    _getIt.registerLazySingleton<CreateReviewStore>(
+        () => CreateReviewStore(_getIt(), _getIt()));
   }
 
   void shared() {
     _getIt.registerLazySingleton<NavigationBarController>(
       () => NavigationBarController(),
+    );
+    _getIt.registerLazySingleton<ICrashlytics>(
+      () => FirebaseCrashlyticsImp(FirebaseCrashlytics.instance),
     );
   }
 

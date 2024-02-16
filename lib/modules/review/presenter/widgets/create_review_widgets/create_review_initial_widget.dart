@@ -34,6 +34,7 @@ class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
       if (result.count > 3) {
         throw BaseException.basicException(
           exception: Exception('Selecione no máximo 3 fotos'),
+          stackTrace: StackTrace.current,
           message: 'Tente novamente e respeito o limite',
         );
       }
@@ -44,12 +45,13 @@ class _CreateReviewInitialWidgetState extends State<CreateReviewInitialWidget> {
       setState(() {});
     } on BaseException catch (e) {
       _store.onErrorGettingImage(e);
-    } catch (e) {
+    } catch (e, s) {
       _store.onErrorGettingImage(
         BaseException.basicException(
           exception: Exception(
             'Não foi possível selecionar as fotos. Tente novamente',
           ),
+          stackTrace: s,
           message: null,
         ),
       );

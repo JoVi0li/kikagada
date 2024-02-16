@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '405829735179',
     projectId: 'kikagada-38625',
     storageBucket: 'kikagada-38625.appspot.com',
-    androidClientId: '405829735179-8fjc3desp3f4bjknb1uj06oqqaprnb9t.apps.googleusercontent.com',
+    androidClientId: '405829735179-1p3lvr55sdd8edf5jc0ag4folsbj34pm.apps.googleusercontent.com',
     iosClientId: '405829735179-0vgd8ovinl7anvkpck6mg0808b7tjo15.apps.googleusercontent.com',
     iosBundleId: 'com.example.kikagada',
   );

@@ -40,7 +40,7 @@ void main() {
       body: "Post body",
       photos: ["https://photo"],
     );
-    error = BaseException.firebaseException(exception: Exception('error'), message: null);
+    error = BaseException.basicException(exception: Exception("error"), stackTrace: StackTrace.fromString(""));
     registerFallbackValue("01");
     registerFallbackValue(review);
     registerFallbackValue([""]);
