@@ -43,7 +43,7 @@ sealed class CreateReviewWidget {
     return initial();
   }
 
-  static Widget success(BuildContext context, void Function() resetValues) {
+  static Widget success(BuildContext context, void Function() resetValues, Future<void> Function() showAd) {
     resetValues();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       return await showAdaptiveDialog<void>(
@@ -55,8 +55,9 @@ sealed class CreateReviewWidget {
             content: 'Acompanhe suas review na\ntela Minhas Reviews',
             actions: [
               ButtonComponent(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context);
+                  showAd();
                 },
                 label: 'Ok',
               ),

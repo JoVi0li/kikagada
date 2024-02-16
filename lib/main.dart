@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kikagada/firebase_options.dart';
 import 'package:kikagada/modules/auth/presenter/screens/login_screen.dart';
 import 'package:kikagada/shared/components/navigation_bar/navigation_bar_component.dart';
@@ -18,12 +19,12 @@ Future<void> main() async {
   );
   Inject.initialize();
   final crashlytics = GetIt.instance<ICrashlytics>();
-
   FlutterError.onError = crashlytics.recordFlutterError;
   PlatformDispatcher.instance.onError = (error, stack) {
     crashlytics.recordError(error as Exception, stack, null);
     return true;
   };
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
